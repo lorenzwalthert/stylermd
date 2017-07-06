@@ -1,4 +1,9 @@
-Name: line length 80
+Name: line length 80 (file)
 Description: Make all lines 80 characters at most
-Binding: tidy_active
+Binding: tidy_active_file
+Interactive: false
+
+Name: line length 80 (region)
+Description: Make all highlighted lines 80 characters at most
+Binding: tidy_active_region
 Interactive: false
