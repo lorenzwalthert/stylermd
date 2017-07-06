@@ -1,0 +1,4 @@
+Name: line length 80
+Description: Make all lines 80 characters at most
+Binding: tidy_active
+Interactive: false
