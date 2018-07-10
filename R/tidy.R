@@ -16,13 +16,67 @@ tidy_file <- function(path = "README.Rmd") {
 
 }
 
+#' @importFrom purrr flatten_chr
 tidy_text <- function(text) {
-  paste(text, collapse = " ") %>%
+  split <- split_text_into_paragraphs(text)
+  map(split, tidy_paragraph) %>%
+    deconstruct_text() %>%
+    flatten_chr()
+}
+
+#' @importFrom rlang seq2
+#' @importFrom purrr map_chr pmap
+split_text_into_paragraphs <- function(text, header = NULL) {
+  is_dash <- "---" == text
+  if (is_dash[1]) {
+    stop <- which(c(FALSE, is_dash[-1]))[1]
+    header <- list(`0` = list(text = c(text[seq2(1L, stop)], ""), class = "header"))
+    text <- text[-seq2(1L, stop)]
+  }
+  non_header <- split(text,
+    cumsum(lag(as.integer(grepl("^\\s*$", text)), default = 0)) + 1L
+  )
+  non_header
+
+  non_header_attrs <- map_chr(non_header, determine_class)
+  non_header_lst <- pmap(list(non_header, non_header_attrs), ~list(text = ..1, class = ..2))
+  append(non_header_lst, header, 0)
+}
+
+determine_class <- function(text) {
+  ifelse(substr(text[1], 1, 3) == "```", "code", "ordinary text")
+}
+
+
+
+tidy_paragraph <- function(text) {
+  if (text$class != "ordinary text") {
+    return(text)
+  }
+  text_without_blank <- text$text[text$text != ""]
+  if (length(text_without_blank) < 1L) return(character(0))
+  paste(text_without_blank, collapse = " ") %>%
     str_replace_all(" +", " ") %>%
     cut_long %>%
     unlist() %>%
     map(trimws, "right") %>%
-    paste(sep = "\n")
+    paste(sep = "\n") %>%
+    c("") %>%
+    construct_text(text$class)
+
+}
+
+
+construct_text <- function(text, class = "ordinary text") {
+  list(text = text, class = class)
+}
+
+deconstruct_text <- function(text) {
+  map(text, "text")
+}
+
+is_not_to_format <- function(text) {
+  substr(trimws(text[1]), 1, 3) == "```"
 }
 
 cutting_points <- function(x, length = 80) {

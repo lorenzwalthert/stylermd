@@ -15,5 +15,6 @@ Imports:
     purrr, 
     readr,
     rstudioapi,
-    stringr,
-    tidyverse
+    stringr
+Suggests: 
+    testthat
