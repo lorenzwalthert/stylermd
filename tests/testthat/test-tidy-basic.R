@@ -21,3 +21,10 @@ test_that("long lines", {
   )
 })
 
+test_that("enumeration", {
+  expect_error(
+    test_collection("enumeration", transformer = tidy_text),
+    NA
+  )
+})
+

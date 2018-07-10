@@ -38,20 +38,21 @@ lag <- function (x, n = 1L, default = NA) {
 determine_class <- function(text) {
   when(text,
        substr(.[1], 1, 3) == "```" ~ "code",
-       substr(.[1], 1, 1) %in% enumeration_keys() ~ "enumeration",
+       grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
+       substr(.[1], 1, 1) %in% bullet_keys() ~ "bullet",
        "ordinary text"
   )
 }
 
-enumeration_keys <- function() {
+bullet_keys <- function() {
   c("*", "+", "-")
 }
 
 
-tidy_enumeration <- function(enumeration) {
-  enumeration <- trimws(enumeration)
-  if (length(enumeration) < 2L) return(enumeration)
-  c(enumeration[1], paste0("  ", enumeration[-1], sep = ""))
+tidy_listing <- function(bullet, spaces = 2) {
+  bullet <- trimws(bullet)
+  if (length(bullet) < 2L) return(bullet)
+  c(bullet[1], paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1], collapse = ""))
 }
 
 
@@ -69,11 +70,11 @@ tidy_paragraph <- function(paragraph) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
-    out <- tidy_lines(text_without_blank, add_only = (class == "enumeration"))
+    out <- tidy_lines(text_without_blank, add_only = (class == "bullet"))
   }
-  if (class %in% "enumeration") {
-    paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% enumeration_keys()))
-    out <- map(paragraphs, tidy_enumeration) %>%
+  if (class %in% c("bullet", "enumeration")) {
+    paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
+    out <- map(paragraphs, tidy_listing, spaces = ifelse(class == "bullet", 2, 3)) %>%
       flatten_chr()
   }
   out %>%
