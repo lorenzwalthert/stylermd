@@ -25,6 +25,11 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   append(non_header_lst, header, 0)
 }
 
+#' @importFrom rlang seq2
+lag <- function (x, n = 1L, default = NA) {
+  c(rep(default, n), x[seq2(1L, length(x) - n)])
+}
+
 #' Determine the class of text chunk
 #'
 #' @param text Text to process.

@@ -20,10 +20,15 @@ cut_long <- function(text, length = 80) {
 #' Find cutting points
 #' @keywords internal
 cutting_points <- function(x, length = 80) {
-  above <- first(which(x >= length))
+  above <- (x >= length)[1]
   below <- last(which(x < length))
   if (is.na(below)) return(x[1])
   x[below]
+}
+
+last <- function(x) {
+  if (length(x) < 1L) return(NA)
+  x[length(x)]
 }
 
 split_pos <- function(string, pos) {

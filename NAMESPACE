@@ -2,7 +2,6 @@
 
 export(tidy_file)
 export(tidy_text)
-import(dplyr)
 import(readr)
 import(rstudioapi)
 import(stringr)

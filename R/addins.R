@@ -1,5 +1,4 @@
 #' tidy current rmd file to fit 80 characters a line
-#' @import dplyr
 #' @import rstudioapi
 #' @import stringr
 #' @import readr
