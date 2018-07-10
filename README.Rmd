@@ -10,3 +10,5 @@ supports:
 
 * Files with and without code chunks (any extension).
 * Enumerations and bullet list.
+* YAML Header.
+* Preserving paragraphs.
