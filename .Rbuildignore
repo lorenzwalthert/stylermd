@@ -1,4 +1,8 @@
+^appveyor\.yml$
+^\.travis\.yml$
+^API$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^README-.*\.png$
+^test\-rmd.Rmd$

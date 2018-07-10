@@ -1,19 +1,26 @@
 Package: stylermd
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Style Markdown text
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: person("Lorenz", "Walthert", role = c("cre", "aut"), email = "lorenz.walthert@icloud.com")
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: MIT + file LICENSE
+License: GPL-3
+Date: 2018-07-10
 Encoding: UTF-8
 LazyData: true
+BugReports: https://github.com/lorenzwalthert/stylermd/issues
+URL: https://github.com/lorenzwalthert/stylermd/issues
+Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate", "pkgapi::api_roclet"))
 RoxygenNote: 6.0.1.9000
 Imports:
     dplyr,
-    purrr, 
+    purrr,
     readr,
     rstudioapi,
     stringr,
-    tidyverse
+    rlang,
+    rprojroot,
+    enc
+Suggests: 
+    testthat
