@@ -13,30 +13,30 @@ test_collection(test, sub_test = NULL, write_back = TRUE,
 tests/testthat.}
 
 \item{sub_test}{A regex pattern to further reduce the amount of test files
-to be tested in the test. `sub_test` must match the beginning of file
-names in tests/testthat. `NULL` matches all files.}
+to be tested in the test. \code{sub_test} must match the beginning of file
+names in tests/testthat. \code{NULL} matches all files.}
 
 \item{write_back}{Whether the results of the transformation should be written
 to the output file.}
 
 \item{write_tree}{Whether or not the tree structure of the test should be
 computed and written to a file. Note that this needs R >= 3.2
-(see [set_arg_write_tree()]). If the argument is set to `NA`, the function
+(see \code{\link[=set_arg_write_tree]{set_arg_write_tree()}}). If the argument is set to \code{NA}, the function
 determines whether R >= 3.2 is in use and if so, trees will be written.}
 
-\item{transformer}{A function to apply to the content of `in_item`.}
+\item{transformer}{A function to apply to the content of \code{in_item}.}
 
 \item{...}{Parameters passed to transformer function.}
 }
 \description{
 Run transformations on all *-in files in a test directory and compare them
-  with their *-out counterpart.
+with their *-out counterpart.
 }
 \details{
-Each file name that matches `test` and `sub_test` and ends with
-  "-in" is considered as an input to test. Its counterpart,
-  the reference to compare it against is the *-out file. It is constructed
-  by taking the substring of the *-in.R file before the
-  first dash and adding -out.
+Each file name that matches \code{test} and \code{sub_test} and ends with
+"-in" is considered as an input to test. Its counterpart,
+the reference to compare it against is the *-out file. It is constructed
+by taking the substring of the *-in.R file before the
+first dash and adding -out.
 }
 \keyword{internal}

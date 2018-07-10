@@ -10,6 +10,7 @@ tidy_line(text)
 \item{text}{Text to prettify.}
 }
 \description{
-Necessary to be called with `purrr::map(..., tidy_lines)` only if `add_only`
-was set to `TRUE` because then we have multiple text lines to tidy.
+Necessary to be called with \code{purrr::map(..., tidy_lines)} only if \code{add_only}
+was set to \code{TRUE} because then we have multiple text lines to tidy.
 }
+\keyword{internal}

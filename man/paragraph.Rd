@@ -14,6 +14,8 @@ deconstruct_paragraph(text, element = "text")
 \item{text}{The text of the paragraph.}
 
 \item{class}{The class of the paragraph.}
+
+\item{element}{Which element to select.}
 }
 \description{
 A paragraph is a list with text and other elements.
@@ -25,3 +27,4 @@ A paragraph is a list with text and other elements.
 \item \code{deconstruct_paragraph}: Exracts an element from a paragraph.
 }}
 
+\keyword{internal}

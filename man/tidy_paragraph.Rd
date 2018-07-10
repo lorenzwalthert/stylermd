@@ -7,10 +7,11 @@
 tidy_paragraph(paragraph)
 }
 \arguments{
-\item{A}{paragraph to tidy.}
+\item{paragraph}{A paragraph to tidy.}
 }
 \description{
 After text has been split into pargraphs with
-[split_text_into_paragraphs()], this is the workhorse for actually formatting
+\code{\link[=split_text_into_paragraphs]{split_text_into_paragraphs()}}, this is the workhorse for actually formatting
 the text.
 }
+\keyword{internal}

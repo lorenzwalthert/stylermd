@@ -16,3 +16,4 @@ Splits text into a list of elements, one corresponding to a paragraph,
 for further processing. Each element
 contains the text an the class of the chunks.
 }
+\keyword{internal}

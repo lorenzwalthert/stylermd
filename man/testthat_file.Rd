@@ -7,7 +7,7 @@
 testthat_file(...)
 }
 \arguments{
-\item{...}{Arguments passed to [file.path()] to construct the path after
+\item{...}{Arguments passed to \code{\link[=file.path]{file.path()}} to construct the path after
 ".../tests/testthat/"}
 }
 \description{

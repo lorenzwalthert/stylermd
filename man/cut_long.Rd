@@ -14,3 +14,4 @@ cut_long(text, length = 80)
 \description{
 Cut a string to a certain length
 }
+\keyword{internal}

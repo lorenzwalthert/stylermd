@@ -10,8 +10,8 @@ set_arg_write_tree(write_tree)
 \item{write_tree}{Whether or not to write tree.}
 }
 \description{
-Sets the argument `write_tree` in [test_collection()] to be `TRUE` for R
-versions higher or equal to 3.2, and `FALSE` otherwise since the second-level
-dependency `DiagrammeR` from `data.tree` is not available for R < 3.2.
+Sets the argument \code{write_tree} in \code{\link[=test_collection]{test_collection()}} to be \code{TRUE} for R
+versions higher or equal to 3.2, and \code{FALSE} otherwise since the second-level
+dependency \code{DiagrammeR} from \code{data.tree} is not available for R < 3.2.
 }
 \keyword{internal}

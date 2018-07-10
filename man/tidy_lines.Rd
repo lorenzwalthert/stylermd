@@ -7,9 +7,12 @@
 tidy_lines(text, add_only = FALSE)
 }
 \arguments{
+\item{text}{Text to tidy.}
+
 \item{add_only}{If we should only add line breaks to lines that are too long
 or if line breaks should also be removed.}
 }
 \description{
 Tidyies mutliple line of code.
 }
+\keyword{internal}

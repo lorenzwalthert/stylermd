@@ -41,9 +41,7 @@ test_collection <- function(test, sub_test = NULL,
   out_items <- file.path(path, out_names)
   in_items <- file.path(path, in_names)
 
-  out_trees <- construct_tree(in_items)
-
-  pwalk(list(in_items, out_items, in_names, out_names, out_trees),
+  pwalk(list(in_items, out_items, in_names, out_names),
         transform_and_check,
         transformer = transformer,
         write_back = write_back,
@@ -60,21 +58,13 @@ test_collection <- function(test, sub_test = NULL,
 #'   *-out.R file, everything after the first dash is replaced by *-out.R.
 #' @param in_paths A character vector that denotes paths to *-in.R files.
 #' @examples
-#' styler:::construct_out(c("path/to/file/first-in.R",
+#' stylermd:::construct_out(c("path/to/file/first-in.R",
 #'  "path/to/file/first-extended-in.R"))
 #' @keywords internal
 construct_out <- function(in_paths) {
   gsub("\\-.*([.]R(?:|md))$", "\\-out\\1", in_paths)
 }
 
-#' Construct paths of a tree object given the paths of *-in.R files
-#'
-#' @param in_paths Character vector of *-in.R files.
-#' @param suffix Suffix for the tree object.
-#' @keywords internal
-construct_tree <- function(in_paths, suffix = "_tree") {
-  gsub("\\.R$", suffix, in_paths)
-}
 
 #' Transform a file an check the result
 #'
@@ -99,12 +89,7 @@ transform_and_check <- function(in_item, out_item,
                                 transformer, write_back,
                                 write_tree = NA,
                                 out_tree = "_tree", ...) {
-  write_tree <- set_arg_write_tree(write_tree)
   read_in <- enc::read_lines_enc(in_item)
-  if (write_tree) {
-    create_tree(read_in) %>%
-      write.table(out_tree, col.names = FALSE, row.names = FALSE, quote = FALSE)
-  }
   transformed_text <- read_in %>%
     transformer(...) %>%
     unclass()
@@ -135,22 +120,4 @@ transform_and_check <- function(in_item, out_item,
 #' @keywords internal
 testthat_file <- function(...) {
   file.path(rprojroot::find_testthat_root_file(), ...)
-}
-
-
-#' Set the write_tree argument
-#'
-#' Sets the argument `write_tree` in [test_collection()] to be `TRUE` for R
-#' versions higher or equal to 3.2, and `FALSE` otherwise since the second-level
-#' dependency `DiagrammeR` from `data.tree` is not available for R < 3.2.
-#' @param write_tree Whether or not to write tree.
-#' @keywords internal
-set_arg_write_tree <- function(write_tree) {
-  sufficient_version <- getRversion() >= 3.2
-  if (is.na(write_tree)) {
-    write_tree <- ifelse(sufficient_version, TRUE, FALSE)
-  } else if (!sufficient_version && write_tree) {
-    stop_insufficient_r_version()
-  }
-  write_tree
 }

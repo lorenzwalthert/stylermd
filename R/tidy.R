@@ -1,29 +1,3 @@
-#' tidy current rmd file to fit 80 characters a line
-#' @import dplyr
-#' @import rstudioapi
-#' @import stringr
-#' @import readr
-#' @importFrom purrr map map2
-tidy_active_file <- function() {
-  file <- rstudioapi::getActiveDocumentContext()$path
-  tidy_file(file)
-}
-
-tidy_file <- function(path = "README.Rmd") {
-  read_lines(path) %>%
-    tidy_text() %>%
-    write_lines(path)
-
-}
-
-#' @importFrom purrr flatten_chr
-tidy_text <- function(text) {
-  split <- split_text_into_paragraphs(text)
-  map(split, tidy_paragraph) %>%
-    deconstruct_paragraph() %>%
-    flatten_chr()
-}
-
 #' Split text into paragraphs
 #'
 #' Splits text into a list of elements, one corresponding to a paragraph,
@@ -33,6 +7,7 @@ tidy_text <- function(text) {
 #' @param header The header, in case there is one and it should be overwritten.
 #' @importFrom rlang seq2
 #' @importFrom purrr map_chr pmap
+#' @keywords internal
 split_text_into_paragraphs <- function(text, header = NULL) {
   is_dash <- "---" == text
   if (is_dash[1]) {
@@ -54,11 +29,12 @@ split_text_into_paragraphs <- function(text, header = NULL) {
 #'
 #' @param text Text to process.
 #' @importFrom purrr when
+#' @keywords internal
 determine_class <- function(text) {
   when(text,
-    substr(.[1], 1, 3) == "```" ~ "code",
-    substr(.[1], 1, 1) %in% enumeration_keys() ~ "enumeration",
-    "ordinary text"
+       substr(.[1], 1, 3) == "```" ~ "code",
+       substr(.[1], 1, 1) %in% enumeration_keys() ~ "enumeration",
+       "ordinary text"
   )
 }
 
@@ -79,7 +55,8 @@ tidy_enumeration <- function(enumeration) {
 #' After text has been split into pargraphs with
 #' [split_text_into_paragraphs()], this is the workhorse for actually formatting
 #' the text.
-#' @param A paragraph to tidy.
+#' @param paragraph A paragraph to tidy.
+#' @keywords internal
 tidy_paragraph <- function(paragraph) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   class <- paragraph$class
@@ -106,6 +83,8 @@ tidy_paragraph <- function(paragraph) {
 #' Tidyies mutliple line of code.
 #' @param add_only If we should only add line breaks to lines that are too long
 #'   or if line breaks should also be removed.
+#' @param text Text to tidy.
+#' @keywords internal
 tidy_lines <- function(text, add_only = FALSE) {
   if (add_only) {
     text <- paste(text, collapse = " ")
@@ -119,6 +98,7 @@ tidy_lines <- function(text, add_only = FALSE) {
 #' Necessary to be called with `purrr::map(..., tidy_lines)` only if `add_only`
 #' was set to `TRUE` because then we have multiple text lines to tidy.
 #' @param text Text to prettify.
+#' @keywords internal
 tidy_line <- function(text) {
   text %>%
     str_replace_all(" +", " ") %>%
@@ -132,7 +112,9 @@ tidy_line <- function(text) {
 #' A paragraph is a list with text and other elements.
 #' @param text The text of the paragraph.
 #' @param class The class of the paragraph.
+#' @param element Which element to select.
 #' @name paragraph
+#' @keywords internal
 NULL
 
 #' @describeIn paragraph Constructs a paragraph.
@@ -143,23 +125,4 @@ construct_paragraph <- function(text, class = "ordinary text") {
 #' @describeIn paragraph Exracts an element from a paragraph.
 deconstruct_paragraph <- function(text, element = "text") {
   map(text, element)
-}
-#' Tidy highlighted region
-tidy_active_region <- function() {
-  file <- rstudioapi::getActiveDocumentContext()$path
-  all <- read_lines(file)
-  selection <- rstudioapi::getActiveDocumentContext()$selection
-  start_row <- selection[[1]]$range$start[1]
-  end_row <- selection[[1]]$range$end[1]
-
-  pre <- all[seq_len(start_row - 1)]
-  post <- if (end_row %in% c(length(all), length(all) + 1)) {
-    post <- NULL
-  } else {
-    post <- all[(end_row + 1):length(all)]
-  }
-  process <- all[start_row:end_row] %>%
-    tidy_text()
-  write_lines(c(pre, process, post), file)
-
 }

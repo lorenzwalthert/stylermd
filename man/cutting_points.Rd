@@ -9,3 +9,4 @@ cutting_points(x, length = 80)
 \description{
 Find cutting points
 }
+\keyword{internal}

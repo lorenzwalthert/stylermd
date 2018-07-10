@@ -12,3 +12,4 @@ determine_class(text)
 \description{
 Determine the class of text chunk
 }
+\keyword{internal}

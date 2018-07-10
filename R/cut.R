@@ -1,6 +1,7 @@
 #' Cut a string to a certain length
 #' @param text The text to cut.
 #' @param length The maximal lenght of a line.
+#' @keywords internal
 cut_long <- function(text, length = 80) {
   if (nchar(text) < length) return(text)
 
@@ -17,6 +18,7 @@ cut_long <- function(text, length = 80) {
 }
 
 #' Find cutting points
+#' @keywords internal
 cutting_points <- function(x, length = 80) {
   above <- first(which(x >= length))
   below <- last(which(x < length))

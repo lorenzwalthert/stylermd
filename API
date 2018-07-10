@@ -1,0 +1,6 @@
+# API for stylermd package
+
+## Exported functions
+
+tidy_file(path)
+tidy_text(text)
