@@ -6,7 +6,7 @@ cut_long <- function(text, length = 80) {
   if (nchar(text) < length) return(text)
 
   blanks <- str_locate_all(text, " ")[[1]][, 1]
-
+  if (all(is.na(blanks))) return(text)
   optimal_length <- cutting_points(blanks, length)
   we_do <- str_sub(text, 1, optimal_length)
   postpone <- str_sub(text, optimal_length + 1, - 1)
@@ -22,7 +22,7 @@ cut_long <- function(text, length = 80) {
 cutting_points <- function(x, length = 80) {
   above <- first(which(x >= length))
   below <- last(which(x < length))
-  if (is.na(below)) return(length)
+  if (is.na(below)) return(x[1])
   x[below]
 }
 

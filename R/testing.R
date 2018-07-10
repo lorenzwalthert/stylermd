@@ -22,7 +22,7 @@ test_collection <- function(test, sub_test = NULL,
                             transformer,
                             pattern = paste0(
                               if (!is.null(sub_test)) paste0("^", sub_test, ".*"),
-                              "\\-in\\.(txt|Rmd)*$"
+                              "\\-in\\.*(txt|Rmd)*$"
                             ),
                             pattern_suffix,
                             ...) {

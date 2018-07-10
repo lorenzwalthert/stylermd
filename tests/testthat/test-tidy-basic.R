@@ -13,3 +13,10 @@ test_that("Bullet list", {
     NA
   )
 })
+
+test_that("long lines", {
+  expect_error(
+    test_collection("long-lines", transformer = tidy_text),
+    NA
+  )
+})
