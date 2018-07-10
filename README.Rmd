@@ -16,3 +16,18 @@ supports:
 * YAML Header.
 * Preserving paragraphs.
 
+You can install it from GitHub:
+```{r, eval = FALSE}
+remotes::install_github("lorenzwalthert/stylermd")
+```
+
+You can use `tidy_text()`, `tidy_file()` and the RStudio Addin (restarting
+RStudio after installation).
+```{r}
+library(magrittr)
+text <- "1. introduced above. We do this by first creating a style guide with the designated wrapper function `create_style_guide()`. It takes transformer"
+stylermd::tidy_text(text) %>%
+  cat(sep = "\n")
+```
+
+
