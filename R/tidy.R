@@ -64,7 +64,7 @@ tidy_paragraph <- function(paragraph) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
-    out <- tidy_lines(text_without_blank, add_only = (class == "code"))
+    out <- tidy_lines(text_without_blank, add_only = (class == "enumeration"))
   }
   if (class %in% "enumeration") {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% enumeration_keys()))
@@ -86,8 +86,9 @@ tidy_paragraph <- function(paragraph) {
 #' @param text Text to tidy.
 #' @keywords internal
 tidy_lines <- function(text, add_only = FALSE) {
-  if (add_only) {
-    text <- paste(text, collapse = " ")
+  if (!add_only) {
+    text <- paste(unlist(strsplit(text, "\n")), collapse = " ")
+  } else {
   }
   map(text, tidy_line) %>%
     unlist()

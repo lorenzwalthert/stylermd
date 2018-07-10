@@ -1,0 +1,4 @@
+This package is simiar to styler, but it styles non-code elements and files
+and it does really just one thing, which is making every line at most 80
+characters. It supports:
+
