@@ -32,5 +32,5 @@ stylermd::tidy_text(text) %>%
   cat(sep = "\n")
 ```
 
-    ## 1. introduced above. We do this by first creating a style guide with the
-    ##    designated wrapper function `create_style_guide()`. It takes transformer
+    1. introduced above. We do this by first creating a style guide with the
+       designated wrapper function `create_style_guide()`. It takes transformer
