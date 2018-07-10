@@ -7,7 +7,7 @@ cut_long <- function(text, length = 80) {
 
   blanks <- str_locate_all(text, " ")[[1]][, 1]
   if (all(is.na(blanks))) return(text)
-  optimal_length <- cutting_points(blanks, length)
+  optimal_length <- cutting_points(blanks, length + 1L)
   we_do <- str_sub(text, 1, optimal_length)
   postpone <- str_sub(text, optimal_length + 1, - 1)
   c(we_do, cut_long(postpone, length)) %>%
@@ -20,8 +20,8 @@ cut_long <- function(text, length = 80) {
 #' Find cutting points
 #' @keywords internal
 cutting_points <- function(x, length = 80) {
-  above <- (x >= length)[1]
-  below <- last(which(x < length))
+  above <- (x > length)[1]
+  below <- last(which(x <= length))
   if (is.na(below)) return(x[1])
   x[below]
 }
