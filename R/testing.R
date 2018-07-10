@@ -22,7 +22,7 @@ test_collection <- function(test, sub_test = NULL,
                             transformer,
                             pattern = paste0(
                               if (!is.null(sub_test)) paste0("^", sub_test, ".*"),
-                              "in\\.(txt|Rmd)*$"
+                              "\\-in\\.(txt|Rmd)*$"
                             ),
                             pattern_suffix,
                             ...) {
@@ -62,7 +62,7 @@ test_collection <- function(test, sub_test = NULL,
 #'  "path/to/file/first-extended-in.R"))
 #' @keywords internal
 construct_out <- function(in_paths) {
-  gsub("\\-.*([.]R(?:|md))$", "\\-out\\1", in_paths)
+  gsub("\\-in([.]R(?:|md))$", "\\-out\\1", in_paths)
 }
 
 
