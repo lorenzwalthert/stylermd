@@ -4,9 +4,9 @@
 #' @param path The path to the file.
 #' @export
 tidy_file <- function(path) {
-  read_lines(path) %>%
+  readLines(path) %>%
     tidy_text() %>%
-    write_lines(path)
+    writeLines(path)
 
 }
 
