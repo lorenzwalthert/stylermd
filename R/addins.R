@@ -1,7 +1,6 @@
 #' tidy current rmd file to fit 80 characters a line
 #' @import rstudioapi
 #' @import stringr
-#' @import readr
 #' @importFrom purrr map map2
 tidy_active_file <- function() {
   context <- get_rstudio_context()
