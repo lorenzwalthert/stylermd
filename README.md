@@ -7,14 +7,17 @@ status](https://travis-ci.org/lorenzwalthert/stylermd.svg?branch=master)](https:
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/lorenzwalthert/stylermd?branch=master&svg=true)](https://ci.appveyor.com/project/lorenzwalthert/stylermd)
 
+**Functionality**
+
 This package is simiar to styler, but it styles non-code elements and
 files and it does really just one thing: Making every line at most 80
 characters. It supports:
 
+  - Both adding and removing linebreaks.
   - Files with and without code chunks (any extension).
   - Enumerations and bullet list.
-  - YAML Header.
-  - Preserving paragraphs.
+  - Files with YAML Header.
+  - Preserves paragraphs.
 
 You can install it from GitHub:
 
@@ -22,8 +25,13 @@ You can install it from GitHub:
 remotes::install_github("lorenzwalthert/stylermd")
 ```
 
-You can use `tidy_text()`, `tidy_file()` and the RStudio Addin
-(restarting RStudio after installation).
+**API**
+
+You can use `tidy_text()`, `tidy_file()` and the RStudio Addins
+(restarting RStudio after installation). One styles the highlighted
+text, the other styles the active file.
+
+**Example**
 
 ``` r
 library(magrittr)
