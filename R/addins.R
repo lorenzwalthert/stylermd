@@ -1,4 +1,9 @@
-#' tidy current rmd file to fit 80 characters a line
+#' Tidy current rmd file to fit 80 characters a line
+#'
+#' @section Auto-Save Option:
+#' By default, both of the RStudio Addins will apply styling to the (selected)
+#' file contents without saving changes. Automatic saving can be enabled by
+#' setting the environment variable `save_after_styling` to `TRUE`.
 #' @import rstudioapi
 #' @import stringr
 #' @importFrom purrr map map2

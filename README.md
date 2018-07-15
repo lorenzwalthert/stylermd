@@ -7,6 +7,16 @@ status](https://travis-ci.org/lorenzwalthert/stylermd.svg?branch=master)](https:
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/lorenzwalthert/stylermd?branch=master&svg=true)](https://ci.appveyor.com/project/lorenzwalthert/stylermd)
 
+> Just keep up one rule: 80 characters per line. I promise it will take
+> 80% of your time.
+> 
+> – <cite>Lorenz Walthert</cite>
+
+The main motivation for creating this package was because when working
+with bookdown / blogdown or Rmarkdown in general, I spent **way too much
+time** just keeping up the 80 charater width rule as every word you add
+or remove in a paragraph affects all subsequent lines.
+
 **Functionality**
 
 This package is simiar to styler, but it styles non-code elements and
@@ -27,9 +37,14 @@ remotes::install_github("lorenzwalthert/stylermd")
 
 **API**
 
-You can use `tidy_text()`, `tidy_file()` and the RStudio Addins
-(restarting RStudio after installation). One styles the highlighted
-text, the other styles the active file.
+You can use:
+
+  - `tidy_text()`.
+  - `tidy_file()`.
+  - the RStudio Addins (restarting RStudio after installation). One
+    styles the highlighted text, the other styles the active file. Set
+    the environment variable `save_after_styling` to `TRUE`, for example
+    in your `.Rprofile` to enable saving after styling.
 
 **Example**
 

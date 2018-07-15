@@ -2,10 +2,17 @@
 % Please edit documentation in R/addins.R
 \name{tidy_active_file}
 \alias{tidy_active_file}
-\title{tidy current rmd file to fit 80 characters a line}
+\title{Tidy current rmd file to fit 80 characters a line}
 \usage{
 tidy_active_file()
 }
 \description{
-tidy current rmd file to fit 80 characters a line
+Tidy current rmd file to fit 80 characters a line
 }
+\section{Auto-Save Option}{
+
+By default, both of the RStudio Addins will apply styling to the (selected)
+file contents without saving changes. Automatic saving can be enabled by
+setting the environment variable \code{save_after_styling} to \code{TRUE}.
+}
+
