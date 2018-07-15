@@ -22,7 +22,7 @@ affects all subsequent lines.
 
 **Functionality**
 
-This package is simiar to styler, but it styles non-code elements and files and
+This package is similar to styler, but it styles non-code elements and files and
 it does really just one thing: Making every line at most 80 characters. It
 supports:
 
