@@ -17,7 +17,7 @@ your time.
 
 The main motivation for creating this package was because when working with
 bookdown / blogdown or Rmarkdown in general, I spent **way too much time** just keeping up
-the 80 charater width rule as every word you add or remove in a paragraph
+the 80 character width rule as every word you add or remove in a paragraph
 affects all subsequent lines.
 
 **Functionality**
