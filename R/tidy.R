@@ -16,7 +16,8 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     text <- text[-seq2(1L, stop)]
   }
   trimmed_text <- trimws(text, which = "both")
-  regex <- glue("^[{glue_collapse(bullet_keys())}]")
+  collapsed_keys <- glue_collapse(bullet_keys())
+  regex <- glue("^[{collapsed_keys}]")
 
   non_header <- split(text,
     cumsum(as.integer(grepl("^\\s*$", lag(trimmed_text)) | grepl(regex, trimmed_text), default = 0)) + 1L
