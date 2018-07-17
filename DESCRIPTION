@@ -20,6 +20,7 @@ Imports:
     stringr,
     rlang,
     rprojroot,
-    enc
+    enc,
+    glue
 Suggests: 
     testthat

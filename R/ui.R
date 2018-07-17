@@ -3,6 +3,7 @@
 #' Tidies a Markdown file
 #' @param path The path to the file.
 #' @export
+#' @import glue
 tidy_file <- function(path) {
   readLines(path) %>%
     tidy_text() %>%

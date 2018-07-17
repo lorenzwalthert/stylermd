@@ -2,30 +2,32 @@
 title: "Untitled"
 output: html_document
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+* Best model (with regard to MSE on log scale) was: fitted on original scale,
+  with time trend from log scale as a predictor (neighter scaled nor centered).
+  It gave an validation set MSE on log scale of 0.044. This was a bit of a
+  coincidence, but I think initially I thought I can just withdraw the time
+  trend
+  from the resonse (and model that), but then I thought including it as a
+  predictor is more flexible and I was not sure if it should be normalizd or
+  not.
+  As of now, it seems as just taking the log is optimal.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for
-authoring HTML, PDF, and MS Word documents. For more details on using R
-Markdown see <http://rmarkdown.rstudio.com>.
+* Best model on log scale also used neighter scaled or centered log timetrend
+  and resulted in a MSE on the log scale for the validation set of 0.08, which
+  is
+  twice as much. Pretty much same grid search / model structures as for model
+  with
+  0.04. Also tried batch normalization, made it worse. MSE of best model fitted
+  on
+  log scale that uses normalized and scaled log timetrend has an MSE that is 10
+  times worse than the best model, i.e. it achieved an MSE of about 0.4 on
+  validation data, with much slower conversion. I need to investigate this more.
+  Hope to provide comprehensive overview of results in a tabular format or so
+  for
+  our meeting on June 18.
 
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
