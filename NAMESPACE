@@ -2,6 +2,7 @@
 
 export(tidy_file)
 export(tidy_text)
+import(glue)
 import(rstudioapi)
 import(stringr)
 importFrom(purrr,flatten_chr)

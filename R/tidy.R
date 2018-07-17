@@ -15,19 +15,32 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     header <- list(`0` = construct_paragraph(c(text[seq2(1L, stop)], ""), "header"))
     text <- text[-seq2(1L, stop)]
   }
-  non_header <- split(text,
-    cumsum(lag(as.integer(grepl("^\\s*$", text)), default = 0)) + 1L
-  )
-  non_header
+  trimmed_text <- trimws(text, which = "both")
+  collapsed_keys <- collapse(bullet_keys())
+  regex <- glue("^[{collapsed_keys}]")
 
+  non_header <- split(text,
+    cumsum(as.integer(grepl("^\\s*$", lag(trimmed_text)) | grepl(regex, trimmed_text), default = 0)) + 1L
+  )
   non_header_attrs <- map_chr(non_header, determine_class)
-  non_header_lst <- pmap(list(non_header, non_header_attrs), ~list(text = ..1, class = ..2))
+  non_header_lst <- pmap(
+    list(
+      non_header, non_header_attrs, lead(non_header_attrs)
+    ),
+    ~list(text = ..1, class = ..2, class_after = ..3)
+  )
+
   append(non_header_lst, header, 0)
 }
 
 #' @importFrom rlang seq2
 lag <- function (x, n = 1L, default = NA) {
   c(rep(default, n), x[seq2(1L, length(x) - n)])
+}
+
+#' @importFrom rlang seq2
+lead <- function(x, n = 1L, default = NA) {
+  c(x[seq2(n + 1, length(x))], rep(default, n))
 }
 
 #' Determine the class of text chunk
@@ -52,7 +65,7 @@ bullet_keys <- function() {
 tidy_listing <- function(bullet, spaces = 2) {
   bullet <- trimws(bullet)
   if (length(bullet) < 2L) return(bullet)
-  c(bullet[1], paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1], collapse = ""))
+  c(bullet[1], paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1]))
 }
 
 
@@ -77,9 +90,13 @@ tidy_paragraph <- function(paragraph) {
     out <- map(paragraphs, tidy_listing, spaces = ifelse(class == "bullet", 2, 3)) %>%
       flatten_chr()
   }
+  if (!(paragraph$class_after %in% c("bullet", "enumeraton"))) {
+    out <- out %>%
+      paste(sep = "\n") %>%
+      c("")
+
+  }
   out %>%
-    paste(sep = "\n") %>%
-    c("") %>%
     construct_paragraph(paragraph$class)
 }
 
