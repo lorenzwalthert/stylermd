@@ -16,7 +16,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     text <- text[-seq2(1L, stop)]
   }
   trimmed_text <- trimws(text, which = "both")
-  collapsed_keys <- glue_collapse(bullet_keys())
+  collapsed_keys <- collapse(bullet_keys())
   regex <- glue("^[{collapsed_keys}]")
 
   non_header <- split(text,
