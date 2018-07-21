@@ -4,10 +4,12 @@
 \alias{tidy_file}
 \title{Tidy a file}
 \usage{
-tidy_file(path)
+tidy_file(path, width = 80)
 }
 \arguments{
 \item{path}{The path to the file.}
+
+\item{width}{The maximal lenght of a line.}
 }
 \description{
 Tidies a Markdown file

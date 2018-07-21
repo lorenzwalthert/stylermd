@@ -2,16 +2,16 @@
 % Please edit documentation in R/cut.R
 \name{cut_long}
 \alias{cut_long}
-\title{Cut a string to a certain length}
+\title{Cut a string to a certain width}
 \usage{
-cut_long(text, length = 80)
+cut_long(text, width)
 }
 \arguments{
 \item{text}{The text to cut.}
 
-\item{length}{The maximal lenght of a line.}
+\item{width}{The maximal lenght of a line.}
 }
 \description{
-Cut a string to a certain length
+Cut a string to a certain width
 }
 \keyword{internal}

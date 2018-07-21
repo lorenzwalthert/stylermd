@@ -4,7 +4,7 @@
 \alias{cutting_points}
 \title{Find cutting points}
 \usage{
-cutting_points(x, length = 80)
+cutting_points(x, width)
 }
 \description{
 Find cutting points

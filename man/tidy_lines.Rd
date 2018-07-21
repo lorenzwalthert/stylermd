@@ -4,10 +4,12 @@
 \alias{tidy_lines}
 \title{Tidy lines}
 \usage{
-tidy_lines(text, add_only = FALSE)
+tidy_lines(text, width, add_only = FALSE)
 }
 \arguments{
 \item{text}{Text to tidy.}
+
+\item{width}{The maximal lenght of a line.}
 
 \item{add_only}{If we should only add line breaks to lines that are too long
 or if line breaks should also be removed.}

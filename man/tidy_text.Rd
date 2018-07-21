@@ -4,10 +4,12 @@
 \alias{tidy_text}
 \title{Tidy text}
 \usage{
-tidy_text(text)
+tidy_text(text, width = 80)
 }
 \arguments{
 \item{text}{The text to tidy.}
+
+\item{width}{The maximal lenght of a line.}
 }
 \description{
 Tidy text

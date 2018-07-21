@@ -2,5 +2,5 @@
 
 ## Exported functions
 
-tidy_file(path)
-tidy_text(text)
+tidy_file(path, width = 80)
+tidy_text(text, width = 80)

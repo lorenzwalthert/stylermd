@@ -4,10 +4,12 @@
 \alias{tidy_line}
 \title{Tidy one line}
 \usage{
-tidy_line(text)
+tidy_line(text, width)
 }
 \arguments{
 \item{text}{Text to prettify.}
+
+\item{width}{The maximal lenght of a line.}
 }
 \description{
 Necessary to be called with \code{purrr::map(..., tidy_lines)} only if \code{add_only}

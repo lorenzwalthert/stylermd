@@ -16,7 +16,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     text <- text[-seq2(1L, stop)]
   }
   trimmed_text <- trimws(text, which = "both")
-  collapsed_keys <- collapse(bullet_keys())
+  collapsed_keys <- glue_collapse(bullet_keys())
   regex <- glue("^[{collapsed_keys}]")
 
   non_header <- split(text,
@@ -75,15 +75,17 @@ tidy_listing <- function(bullet, spaces = 2) {
 #' [split_text_into_paragraphs()], this is the workhorse for actually formatting
 #' the text.
 #' @param paragraph A paragraph to tidy.
+#' @inheritParams cut_long
 #' @keywords internal
-tidy_paragraph <- function(paragraph) {
+tidy_paragraph <- function(paragraph, width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   class <- paragraph$class
   if (class %in% c("header", "code")) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
-    out <- tidy_lines(text_without_blank, add_only = (class == "bullet"))
+    out <- tidy_lines(text_without_blank,
+                      width = width, add_only = (class == "bullet"))
   }
   if (class %in% c("bullet", "enumeration")) {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
@@ -107,13 +109,14 @@ tidy_paragraph <- function(paragraph) {
 #' @param add_only If we should only add line breaks to lines that are too long
 #'   or if line breaks should also be removed.
 #' @param text Text to tidy.
+#' @inheritParams cut_long
 #' @keywords internal
-tidy_lines <- function(text, add_only = FALSE) {
+tidy_lines <- function(text, width, add_only = FALSE) {
   if (!add_only) {
     text <- paste(unlist(strsplit(text, "\n")), collapse = " ")
   } else {
   }
-  map(text, tidy_line) %>%
+  map(text, tidy_line, width) %>%
     unlist()
 }
 
@@ -122,11 +125,12 @@ tidy_lines <- function(text, add_only = FALSE) {
 #' Necessary to be called with `purrr::map(..., tidy_lines)` only if `add_only`
 #' was set to `TRUE` because then we have multiple text lines to tidy.
 #' @param text Text to prettify.
+#' @inheritParams cut_long
 #' @keywords internal
-tidy_line <- function(text) {
+tidy_line <- function(text, width) {
   text %>%
     str_replace_all(" +", " ") %>%
-    cut_long() %>%
+    cut_long(width) %>%
     unlist() %>%
     map(trimws, "right")
 }
