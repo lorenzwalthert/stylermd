@@ -98,6 +98,10 @@ tidy_paragraph <- function(paragraph, width) {
       c("")
 
   }
+  if (!(paragraph$class %in% c("bullet", "enumeration")) &&
+      paragraph$class_after %in% c("bullet", "enumeration")) {
+    out <- c(out, "")
+  }
   out %>%
     construct_paragraph(paragraph$class)
 }

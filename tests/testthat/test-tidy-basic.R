@@ -34,4 +34,3 @@ test_that("enumeration", {
     NA
   )
 })
-
