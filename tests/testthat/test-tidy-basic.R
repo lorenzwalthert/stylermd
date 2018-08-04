@@ -34,3 +34,10 @@ test_that("enumeration", {
     NA
   )
 })
+
+test_that("code", {
+  expect_error(
+    test_collection("code", transformer = tidy_text),
+    NA
+  )
+})

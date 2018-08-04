@@ -16,13 +16,26 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     text <- text[-seq2(1L, stop)]
   }
   trimmed_text <- trimws(text, which = "both")
+
+  code_start <- which(substr(text, 1, 4) ==  "```{")
+  code_stop <- setdiff(which(substr(text, 1, 3) ==  "```"), code_start)
+  is_code <- map2(code_start + 1L, code_stop, seq2) %>%
+    flatten_int() %>%
+    unwhich(length(text))
+
   collapsed_keys <- glue_collapse(bullet_keys())
   regex <- glue("^[{collapsed_keys}]")
+  is_enumeration <- grepl(regex, trimmed_text)
 
-  non_header <- split(text,
-    cumsum(as.integer(grepl("^\\s*$", lag(trimmed_text)) | grepl(regex, trimmed_text), default = 0)) + 1L
-  )
-  non_header_attrs <- map_chr(non_header, determine_class)
+  has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_text))
+
+
+  is_split_point <- (has_line_break_afterwards | is_enumeration) & (!is_code)
+
+  block <- cumsum(as.integer(is_split_point)) + 1L
+
+  non_header <- split(text, block)
+  non_header_attrs <- determine_class(non_header)
   non_header_lst <- pmap(
     list(
       non_header, non_header_attrs, lead(non_header_attrs)
@@ -43,16 +56,32 @@ lead <- function(x, n = 1L, default = NA) {
   c(x[seq2(n + 1, length(x))], rep(default, n))
 }
 
+determine_class <- function(text) {
+  class <- map_chr(text, determine_class_one)
+  fix_class_for_code(class)
+}
+
+#' @importFrom purrr map2 flatten_int
+#' @importFrom rlang seq2
+fix_class_for_code <- function(class) {
+  start <- which(class == "code_start")
+  stop <- which(class == "code_stop")
+  idx_code <- map2(start, stop, seq2) %>% flatten_int()
+  class[idx_code] <- "code"
+  class
+}
+
 #' Determine the class of text chunk
 #'
 #' @param text Text to process.
 #' @importFrom purrr when
 #' @keywords internal
-determine_class <- function(text) {
+determine_class_one <- function(text) {
   when(text,
-       substr(.[1], 1, 3) == "```" ~ "code",
+       substr(.[1], 1, 4) == "```{" ~ "code",
        grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
        substr(.[1], 1, 1) %in% bullet_keys() ~ "bullet",
+       substr(.[1], 1, 1) == "#" ~ "title",
        "ordinary text"
   )
 }
@@ -80,7 +109,7 @@ tidy_listing <- function(bullet, spaces = 2) {
 tidy_paragraph <- function(paragraph, width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   class <- paragraph$class
-  if (class %in% c("header", "code")) {
+  if (class %in% c("header", "code", "title")) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
