@@ -5,8 +5,9 @@
 \title{Run a collection of tests}
 \usage{
 test_collection(test, sub_test = NULL, write_back = TRUE,
-  write_tree = FALSE, transformer, pattern = paste0(if (!is.null(sub_test))
-  paste0("^", sub_test, ".*"), "\\\\-in\\\\.*(txt|Rmd)*$"), pattern_suffix, ...)
+  write_tree = FALSE, transformer, pattern = paste0(if
+  (!is.null(sub_test)) paste0("^", sub_test, ".*"),
+  "\\\\-in\\\\.*(txt|Rmd)*$"), pattern_suffix, ...)
 }
 \arguments{
 \item{test}{The test to run. It corresponds to a folder name in
