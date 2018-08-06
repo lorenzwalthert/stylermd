@@ -1,0 +1,6 @@
+After having tried differnt NAS in an unstructured way, we decided to adapt a
+more structural search. We first do an *exploratory* search to gain a rough
+understanding for what works and what does not before we optimize models in a
+*granular* search around the NAS that showed good performance in the exporatory
+part.
+
