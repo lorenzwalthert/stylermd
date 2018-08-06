@@ -117,8 +117,7 @@ tidy_paragraph <- function(paragraph, width) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
-    out <- tidy_lines(text_without_blank,
-                      width = width, add_only = (class == "bullet"))
+    out <- tidy_lines(text_without_blank, width = width)
   }
   if (class %in% c("bullet", "enumeration")) {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
