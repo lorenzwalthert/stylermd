@@ -19,7 +19,7 @@ or remove in a paragraph affects all subsequent lines.
 
 This package is similar to styler, but it styles non-code elements and
 files and it does really just one thing: Making every line at most 80
-characters, or a custom line width you can se with the Option
+characters, or a custom line width you can set with the option
 `stylermd.linewidth`, i.e. `options("stylermd.linewidth", 60)`. It
 supports:
 
