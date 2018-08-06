@@ -5,7 +5,7 @@
 #' @inheritParams cut_long
 #' @export
 #' @import glue
-tidy_file <- function(path, width = 80) {
+tidy_file <- function(path, width = getOption("stylermd.line_width")) {
   readLines(path) %>%
     tidy_text(width) %>%
     writeLines(path)
@@ -17,7 +17,7 @@ tidy_file <- function(path, width = 80) {
 #' @inheritParams cut_long
 #' @importFrom purrr flatten_chr map
 #' @export
-tidy_text <- function(text, width = 80) {
+tidy_text <- function(text, width = getOption("stylermd.line_width")) {
   split <- split_text_into_paragraphs(text)
   map(split, tidy_paragraph, width = width) %>%
     deconstruct_paragraph() %>%
