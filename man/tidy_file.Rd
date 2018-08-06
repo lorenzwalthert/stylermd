@@ -4,7 +4,7 @@
 \alias{tidy_file}
 \title{Tidy a file}
 \usage{
-tidy_file(path, width = 80)
+tidy_file(path, width = getOption("stylermd.line_width"))
 }
 \arguments{
 \item{path}{The path to the file.}

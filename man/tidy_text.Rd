@@ -4,7 +4,7 @@
 \alias{tidy_text}
 \title{Tidy text}
 \usage{
-tidy_text(text, width = 80)
+tidy_text(text, width = getOption("stylermd.line_width"))
 }
 \arguments{
 \item{text}{The text to tidy.}
