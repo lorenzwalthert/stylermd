@@ -23,8 +23,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     flatten_int() %>%
     unwhich(length(text))
 
-  collapsed_keys <- glue_collapse(bullet_keys())
-  regex <- glue("^[{collapsed_keys}]")
+  regex <- bullet_keys_collapsed()
   is_enumeration <- grepl(regex, trimmed_text)
 
   has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_text))
@@ -44,6 +43,11 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   )
 
   append(non_header_lst, header, 0)
+}
+
+bullet_keys_collapsed <- function() {
+  collapsed_keys <- glue_collapse(bullet_keys())
+  glue("^[{collapsed_keys}]")
 }
 
 #' @importFrom rlang seq2
@@ -80,14 +84,14 @@ determine_class_one <- function(text) {
   when(text,
        substr(.[1], 1, 4) == "```{" ~ "code",
        grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
-       substr(.[1], 1, 1) %in% bullet_keys() ~ "bullet",
+       grepl(bullet_keys_collapsed(),substr(.[1], 1, 2)) ~ "bullet",
        substr(.[1], 1, 1) == "#" ~ "title",
        "ordinary text"
   )
 }
 
 bullet_keys <- function() {
-  c("*", "+", "-")
+  c("* ", "+", "-")
 }
 
 

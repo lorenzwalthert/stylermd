@@ -1,0 +1,3 @@
+this is random text and it's not an enumeration, however, it can happen that the *first*
+on a new line is surrounded by stars because it should be bold or italic. This
+does **not** indicate a bullet list.
