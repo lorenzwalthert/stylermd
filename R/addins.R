@@ -15,6 +15,7 @@ tidy_active_file <- function() {
     paste0(append(out, ""), collapse = "\n"), id = context$id
   )
   may_save(context)
+  rstudioapi::setCursorPosition(context$selection[[1]]$range)
 }
 
 may_save <- function(context) {
