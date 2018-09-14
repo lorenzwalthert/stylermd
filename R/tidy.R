@@ -24,7 +24,9 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_body))
 
 
-  is_split_point <- (has_line_break_afterwards | is_enumeration) & (!is_code)
+  is_split_point <- (has_line_break_afterwards | is_enumeration) &
+    (!is_code) |
+    is_code_start
 
   block <- cumsum(as.integer(is_split_point)) + 1L
 
