@@ -35,9 +35,17 @@ test_that("enumeration", {
   )
 })
 
+test_that("code chunks without preceding blank", {
+  expect_error(
+    test_collection("code", "chunk-without-blank",
+      transformer = tidy_text),
+    NA
+  )
+})
+
 test_that("code", {
   expect_error(
-    test_collection("code", transformer = tidy_text),
+    test_collection("code", "linebreaks", transformer = tidy_text),
     NA
   )
 })
