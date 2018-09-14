@@ -8,32 +8,27 @@
 #' @importFrom rlang seq2
 #' @importFrom purrr map_chr pmap
 #' @keywords internal
+#' @import zeallot
 split_text_into_paragraphs <- function(text, header = NULL) {
-  is_dash <- "---" == text
-  if (is_dash[1]) {
-    stop <- which(c(FALSE, is_dash[-1]))[1]
-    header <- list(`0` = construct_paragraph(c(text[seq2(1L, stop)], ""), "header"))
-    text <- text[-seq2(1L, stop)]
-  }
-  trimmed_text <- trimws(text, which = "both")
-
-  code_start <- which(substr(text, 1, 4) ==  "```{")
-  code_stop <- setdiff(which(substr(text, 1, 3) ==  "```"), code_start)
+  c(header, body) %<-% split_text_into_heder_and_paragraph(text, header)
+  is_code_start <- substr(body, 1, 4) ==  "```{"
+  code_start <- which(is_code_start)
+  code_stop <- setdiff(which(substr(body, 1, 3) ==  "```"), code_start)
   is_code <- map2(code_start + 1L, code_stop, seq2) %>%
     flatten_int() %>%
-    unwhich(length(text))
-
+    unwhich(length(body))
+  trimmed_body <- trimws(body, which = "both")
   regex <- bullet_keys_collapsed()
-  is_enumeration <- grepl(regex, trimmed_text)
+  is_enumeration <- grepl(regex, trimmed_body)
 
-  has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_text))
+  has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_body))
 
 
   is_split_point <- (has_line_break_afterwards | is_enumeration) & (!is_code)
 
   block <- cumsum(as.integer(is_split_point)) + 1L
 
-  non_header <- split(text, block)
+  non_header <- split(body, block)
   non_header_attrs <- determine_class(non_header)
   non_header_lst <- pmap(
     list(
@@ -43,6 +38,16 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   )
 
   append(non_header_lst, header, 0)
+}
+
+split_text_into_heder_and_paragraph <- function(text, header = NULL) {
+  is_dash <- "---" == text
+  if (is_dash[1]) {
+    stop <- which(c(FALSE, is_dash[-1]))[1]
+    header <- list(`0` = construct_paragraph(c(text[seq2(1L, stop)], ""), "header"))
+    text <- text[-seq2(1L, stop)]
+  }
+  list(header = header, body = text)
 }
 
 bullet_keys_collapsed <- function() {
