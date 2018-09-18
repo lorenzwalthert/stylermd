@@ -45,9 +45,11 @@ You can use:
     styles the highlighted text, the other styles the active file,
     remembering the cursor position. Set the environment variable
     `save_after_styling` to `TRUE`, for example in your `.Rprofile` to
-    enable saving after styling. **Example**
+    enable saving after styling. Hint: Assign a keyboard short-cut for
+    the Addin with *Menu -\> Tools -\> Modify Keyboard Shortcuts* for
+    most productive use.
 
-<!-- end list -->
+**Example**
 
 ``` r
 library(magrittr)
