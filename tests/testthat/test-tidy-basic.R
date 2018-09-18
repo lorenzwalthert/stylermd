@@ -49,3 +49,10 @@ test_that("code", {
     NA
   )
 })
+
+test_that("don't break title", {
+  expect_error(
+    test_collection("title", "dont-break", transformer = tidy_text),
+    NA
+  )
+})
