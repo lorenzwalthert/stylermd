@@ -11,10 +11,8 @@
 #' @import zeallot
 split_text_into_paragraphs <- function(text, header = NULL) {
   c(header, body) %<-% split_text_into_heder_and_paragraph(text, header)
-  is_code_start <- substr(body, 1, 4) ==  "```{"
-  code_start <- which(is_code_start)
-  code_stop <- setdiff(which(substr(body, 1, 3) ==  "```"), code_start)
-  is_code <- map2(code_start + 1L, code_stop, seq2) %>%
+  c(code_start, is_code_start, code_stop) %<-% find_code_boundaries(body)
+  is_code <- map2(code_start, code_stop, seq2) %>%
     flatten_int() %>%
     unwhich(length(body))
   trimmed_body <- trimws(body, which = "both")
@@ -40,6 +38,17 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   )
 
   append(non_header_lst, header, 0)
+}
+
+find_code_boundaries <- function(body) {
+  is_code_boundary <- substr(body, 1, 3) ==  "```"
+  code_boundary <- which(is_code_boundary)
+  code_start <- odd(code_boundary)
+  list(
+    code_start = code_start,
+    is_code_start = unwhich(code_start, n = length(body)),
+    code_stop = even(code_boundary)
+  )
 }
 
 split_text_into_heder_and_paragraph <- function(text, header = NULL) {
@@ -89,7 +98,7 @@ fix_class_for_code <- function(class) {
 #' @keywords internal
 determine_class_one <- function(text) {
   when(text,
-       substr(.[1], 1, 4) == "```{" ~ "code",
+       substr(.[1], 1, 3) == "```" ~ "code",
        grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
        grepl(bullet_keys_collapsed(), substr(.[1], 1, 2)) ~ "bullet",
        substr(.[1], 1, 1) == "#" ~ "title",
