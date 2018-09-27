@@ -1,0 +1,10 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+Mithilfe dieses Projektes können Modelle berechnet werden. Wird
+
+-> WORT verwendet, heisst das, WORT hat eine genau definierte Bedeutung, welche
+in der Hautpdokumentation unter
+

@@ -107,7 +107,7 @@ determine_class_one <- function(text) {
 }
 
 bullet_keys <- function() {
-  c("* ", "+", "-")
+  c("* ", "+ ", "- ")
 }
 
 
