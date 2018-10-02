@@ -26,6 +26,7 @@ supports:
   - Both adding and removing linebreaks for float text, enumerations,
     bullet lists.
   - Files with and without code chunks (any extension).
+  - Ignoring code chunks and latex equations.
   - Files with YAML Header.
   - Preserves paragraphs.
 

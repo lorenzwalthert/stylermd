@@ -41,7 +41,9 @@ split_text_into_paragraphs <- function(text, header = NULL) {
 }
 
 find_code_boundaries <- function(body) {
-  is_code_boundary <- substr(body, 1, 3) ==  "```"
+  is_code_boundary <-
+    (substr(body, 1, 3) ==  c("```")) |
+    (substr(body, 1, 2) == "$$")
   code_boundary <- which(is_code_boundary)
   code_start <- odd(code_boundary)
   list(
@@ -99,6 +101,7 @@ fix_class_for_code <- function(class) {
 determine_class_one <- function(text) {
   when(text,
        substr(.[1], 1, 3) == "```" ~ "code",
+       substr(.[1], 1, 2) == "$$" ~ "code",
        grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
        grepl(bullet_keys_collapsed(), substr(.[1], 1, 2)) ~ "bullet",
        substr(.[1], 1, 1) == "#" ~ "title",

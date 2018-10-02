@@ -61,6 +61,13 @@ test_that("code", {
   )
 })
 
+test_that("code with latex $$ $$ is recognized", {
+  expect_error(
+    test_collection("code", "latex-formula", transformer = tidy_text),
+    NA
+  )
+})
+
 
 test_that("don't break title", {
   expect_error(
