@@ -16,7 +16,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     flatten_int() %>%
     unwhich(length(body))
   trimmed_body <- trimws(body, which = "both")
-  regex <- bullet_keys_collapsed()
+  regex <- paste0(bullet_keys_collapsed(), "|[0-9]+\\.", sep = "")
   is_enumeration <- grepl(regex, trimmed_body)
 
   has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_body))
@@ -63,9 +63,9 @@ split_text_into_heder_and_paragraph <- function(text, header = NULL) {
   list(header = header, body = text)
 }
 
-bullet_keys_collapsed <- function() {
+bullet_keys_collapsed <- function(trailing = "") {
   collapsed_keys <- glue_collapse(paste0("\\", bullet_keys()), sep = "|")
-  glue("^({collapsed_keys})")
+  glue("^{trailing}({collapsed_keys})")
 }
 
 #' @importFrom rlang seq2
@@ -102,8 +102,11 @@ determine_class_one <- function(text) {
   when(text,
        substr(.[1], 1, 3) == "```" ~ "code",
        substr(.[1], 1, 2) == "$$" ~ "code",
-       grepl("^[0-9]+\\.\\s+", text[1], perl = TRUE) ~ "enumeration",
-       grepl(bullet_keys_collapsed(), substr(.[1], 1, 2)) ~ "bullet",
+       grepl("^[0-9]+\\.\\s+", .[1], perl = TRUE) ~ "enumeration 1",
+       grepl("^\\s\\s+[0-9]+\\.\\s+", .[1]) ~ "enumeration 2",
+       grepl(bullet_keys_collapsed(), .[1]) ~ "bullet 1",
+       grepl(bullet_keys_collapsed("  +"), .[1]) ~ "bullet 2",
+
        substr(.[1], 1, 1) == "#" ~ "title",
        "ordinary text"
   )
@@ -114,10 +117,12 @@ bullet_keys <- function() {
 }
 
 
-tidy_listing <- function(bullet, spaces = 2) {
+tidy_listing <- function(bullet, spaces = 2, spaces_leading) {
   bullet <- trimws(bullet)
-  if (length(bullet) < 2L) return(bullet)
-  c(bullet[1], paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1]))
+  c(
+    paste0(paste0(rep(" ", max(0, spaces_leading)), collapse = ""), bullet[1]),
+    paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1])
+  )
 }
 
 
@@ -132,31 +137,50 @@ tidy_listing <- function(bullet, spaces = 2) {
 tidy_paragraph <- function(paragraph, width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   class <- paragraph$class
+  class_without_level <- drop_level_of_class(class)
+  class_without_level_after <- drop_level_of_class(paragraph$class_after)
   if (class %in% c("header", "code", "title")) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
     out <- tidy_lines(text_without_blank, width = width)
   }
-  if (class %in% c("bullet", "enumeration")) {
+
+  if (class_without_level %in% c("bullet","enumeration")) {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
-    out <- map(paragraphs, tidy_listing, spaces = ifelse(class == "bullet", 2, 3)) %>%
+    spaces <- determine_trailing_spaces(class)
+    spaces_leading <- ifelse(class_without_level == "bullet", spaces - 2, spaces - 3)
+    out <- map(paragraphs, tidy_listing, spaces = spaces, spaces_leading = spaces_leading) %>%
       flatten_chr()
   }
-  if (!(paragraph$class_after %in% c("bullet", "enumeraton"))) {
-    out <- out %>%
-      paste(sep = "\n") %>%
-      c("")
-
-  }
-  if (!(paragraph$class %in% c("bullet", "enumeration")) &&
-      paragraph$class_after %in% c("bullet", "enumeration")) {
-    out <- c(out, "")
-  }
-  out %>%
-    construct_paragraph(paragraph$class)
+    out %>%
+      ensure_empty_trailing_line() %>%
+      construct_paragraph(paragraph$class)
 }
 
+
+ensure_empty_trailing_line <- function(x) {
+  is_empty <- trimws(x, which = "both") == ""
+  c(x[!is_empty], "")
+}
+
+determine_trailing_spaces <- function(class) {
+  when(class,
+    . == "bullet 1" ~ 2,
+    . == "bullet 2" ~ 4,
+    . == "enumeration 1" ~ 3,
+    . == "enumeration 2" ~ 5,
+    ~ 2
+  )
+}
+
+
+#' Drops hierarchival level of class
+#'
+#' E.g. enumeration 1 -> enumeration, but level -> level
+drop_level_of_class <- function(class) {
+  gsub("\\s*[0-9]+$", "", class)
+}
 
 #' Tidy lines
 #'
@@ -185,6 +209,7 @@ tidy_lines <- function(text, width, add_only = FALSE) {
 tidy_line <- function(text, width) {
   text %>%
     str_replace_all(" +", " ") %>%
+    str_replace_all("^ ", "") %>%
     cut_long(width) %>%
     unlist() %>%
     map(trimws, "right")
