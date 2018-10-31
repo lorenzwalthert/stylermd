@@ -24,7 +24,7 @@ characters, or a custom line width you can set with the option
 supports:
 
   - Both adding and removing linebreaks for float text, enumerations,
-    bullet lists.
+    bullet lists (currently up to two levels of nesting).
   - Files with and without code chunks (any extension).
   - Ignoring code chunks and latex equations.
   - Files with YAML Header.
@@ -54,6 +54,18 @@ You can use:
 
 ``` r
 library(magrittr)
+```
+
+``` 
+
+Attaching package: 'magrittr'
+```
+
+    The following objects are masked from 'package:testthat':
+    
+        equals, is_less_than, not
+
+``` r
 text <- "1. introduced above. We do this by first creating a style guide with the designated wrapper function `create_style_guide()`. It takes transformer"
 stylermd::tidy_text(text) %>%
   cat(sep = "\n")
