@@ -10,7 +10,7 @@
 #' @keywords internal
 #' @import zeallot
 split_text_into_paragraphs <- function(text, header = NULL) {
-  c(header, body) %<-% split_text_into_heder_and_paragraph(text, header)
+  c(header, body) %<-% split_text_into_header_and_paragraph(text, header)
   c(code_start, is_code_start, code_stop) %<-% find_code_boundaries(body)
   is_code <- map2(code_start, code_stop, seq2) %>%
     flatten_int() %>%
@@ -20,7 +20,6 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   is_enumeration <- grepl(regex, trimmed_body)
 
   has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_body))
-
 
   is_split_point <- (has_line_break_afterwards | is_enumeration) &
     (!is_code) |
@@ -53,7 +52,7 @@ find_code_boundaries <- function(body) {
   )
 }
 
-split_text_into_heder_and_paragraph <- function(text, header = NULL) {
+split_text_into_header_and_paragraph <- function(text, header = NULL) {
   is_dash <- "---" == text
   if (is_dash[1]) {
     stop <- which(c(FALSE, is_dash[-1]))[1]
