@@ -15,11 +15,12 @@ tidy_file <- function(path, width = getOption("stylermd.line_width")) {
 #' Tidy text
 #' @param text The text to tidy.
 #' @inheritParams cut_long
-#' @importFrom purrr flatten_chr map
+#' @importFrom purrr flatten_chr map2
 #' @export
 tidy_text <- function(text, width = getOption("stylermd.line_width")) {
   split <- split_text_into_paragraphs(text)
-  map(split, tidy_paragraph, width = width) %>%
+  text_width <- determine_text_with_from_paragraphs(split, target_width = width)
+  map2(split, text_width, tidy_paragraph) %>%
     deconstruct_paragraph() %>%
     flatten_chr()
 }

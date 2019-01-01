@@ -83,6 +83,15 @@ determine_class <- function(text) {
   fix_class_for_code(class)
 }
 
+determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
+  classes <- map_chr(paragraphs, ~.x$class)
+  purrr::when(classes,
+    . == "bullet" ~ target_width - 2,
+    . == "enumeration" ~ target_width - 3,
+    target_width
+  )
+}
+
 #' @importFrom purrr map2 flatten_int
 #' @importFrom rlang seq2
 fix_class_for_code <- function(class) {
