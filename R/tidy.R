@@ -141,9 +141,11 @@ tidy_listing <- function(bullet, spaces = 2, spaces_leading) {
 #' [split_text_into_paragraphs()], this is the workhorse for actually formatting
 #' the text.
 #' @param paragraph A paragraph to tidy.
+#' @param text_width The width of the text alone, not the same as the total
+#'   line-width for lines containing bullet points ect.
 #' @inheritParams cut_long
 #' @keywords internal
-tidy_paragraph <- function(paragraph, width) {
+tidy_paragraph <- function(paragraph, text_width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   class <- paragraph$class
   class_without_level <- drop_level_of_class(class)
@@ -152,7 +154,7 @@ tidy_paragraph <- function(paragraph, width) {
     return(paragraph)
   } else {
     if (length(text_without_blank) < 1L) return(character(0))
-    out <- tidy_lines(text_without_blank, width = width)
+    out <- tidy_lines(text_without_blank, width = text_width)
   }
 
   if (class_without_level %in% c("bullet","enumeration")) {
