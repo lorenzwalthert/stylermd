@@ -30,9 +30,12 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   non_header_attrs <- determine_class(non_header)
   non_header_lst <- pmap(
     list(
-      non_header, non_header_attrs, lead(non_header_attrs)
+      non_header, non_header_attrs, lead(non_header_attrs, default = list(new_class_and_indent()))
     ),
-    ~list(text = ..1, class = ..2, class_after = ..3)
+    ~list(
+      text = ..1, class = ..2[["class"]], class_after = ..3[["class"]],
+      indent = ..2[["indent"]]
+    )
   )
 
   append(non_header_lst, header, 0)
@@ -73,46 +76,71 @@ bullet_keys_collapsed <- function(trailing = "") {
   glue("^{trailing}({collapsed_keys})")
 }
 
-determine_class <- function(text) {
-  map_chr(text, determine_class_one)
+#' Determine the class of paragraphs
+#'
+#' @param paragraphs A list of non-header paragraphs.
+#' @importFrom purrr map
+determine_class <- function(paragraphs) {
+  map(paragraphs, determine_class_one)
 }
 
 #' Determine the class of text chunk
 #'
-#' @param text Text to process.
+#' @param paragraph A paragraph, i.e. a character vector.
 #' @importFrom purrr when
 #' @keywords internal
-determine_class_one <- function(text) {
-  class <- when(text,
-       substr(.[1], 1, 3) == "```" ~ "code",
-       substr(.[1], 1, 2) == "$$" ~ "code",
-       substr(.[1], 1, 1) == "#" ~ "title",
-       grepl("^[0-9]+\\.\\s+", .[1], perl = TRUE) ~ "enumeration 1",
-       grepl("^\\s\\s+[0-9]+\\.\\s+", .[1]) ~ "enumeration 2",
-       grepl(bullet_keys_collapsed(), .[1]) ~ "bullet 1",
-       grepl(bullet_keys_collapsed("  +"), .[1]) ~ "bullet 2",
-       "ordinary text"
-  )
-  fix_class_for_code(class)
+determine_class_one <- function(paragraph) {
+  if (substr(paragraph[1], 1, 3) == "```" || substr(paragraph[1], 1, 2) == "$$") {
+    return(new_class_and_indent("code"))
+  }
+  if (substr(paragraph[1], 1, 1) == "#") {
+    return(new_class_and_indent("title"))
+  }
+  class_enumeration <- determine_class_enumeration(paragraph)
+  if (!is.na(class_enumeration$class)) {
+    return(class_enumeration)
+  }
+  class_bullet <- determine_class_bullet(paragraph)
+  if (!is.na(class_bullet$class)) {
+    return(class_bullet)
+  }
+
+  return(new_class_and_indent("ordinary text"))
 }
 
-#' @importFrom purrr map2 flatten_int
-#' @importFrom rlang seq2
-fix_class_for_code <- function(class) {
-  start <- which(class == "code_start")
-  stop <- which(class == "code_stop")
-  if (length(start) < 1L | length(stop) < 1L) return(class)
-  idx_code <- seq2(start, stop)
-  class[idx_code] <- "code"
-  class
+#' Helper function to construct a list with elements class and indent that
+#' has sensible defaults.
+new_class_and_indent <- function(class = NA, indent = NA) {
+  list(class = class, indent = indent)
 }
 
-
-determine_class_enumeration <- function(text) {
-
+#' @param t_nchar_to_indent The bare name of a function that transforms the
+#'   number of leading spaces of the first line of the paragraph into an
+#'   indention level, i.e. a mapping from number of characters to the indent.
+#' @param class The class, if matched.
+template_determine_class <- function(paragraph,
+                                     regex,
+                                     class) {
+  length_enumeration <- str_match(paragraph[1], regex)[, 2]
+  if (!is.na(length_enumeration)) {
+    new_class_and_indent(
+      class,
+      nchar(length_enumeration)
+    )
+  } else {
+    new_class_and_indent()
+  }
 }
-#' * determine class (bullet or enumeration)
-#' * determine depth
+
+determine_class_bullet <- purrr::partial(
+  template_determine_class, regex = "^(\\s*)(\\* |\\+ |\\- )",
+  class = "bullet"
+)
+
+determine_class_enumeration <- purrr::partial(
+  template_determine_class, regex = "^(\\s*)[0-9]+\\.\\s+",
+  class = "enumeration"
+)
 
 determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
   classes <- map_chr(paragraphs, ~.x$class)

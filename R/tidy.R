@@ -10,20 +10,17 @@
 #' @keywords internal
 tidy_paragraph <- function(paragraph, text_width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
-  class <- paragraph$class
-  class_without_level <- drop_level_of_class(class)
-  class_without_level_after <- drop_level_of_class(paragraph$class_after)
-  if (class %in% c("header", "code", "title")) {
+  if (length(text_without_blank) < 1L) return(character(0))
+  if (paragraph$class %in% c("header", "code", "title")) {
     return(paragraph)
   } else {
-    if (length(text_without_blank) < 1L) return(character(0))
     out <- tidy_lines(text_without_blank, width = text_width)
   }
 
-  if (class_without_level %in% c("bullet","enumeration")) {
+  if (paragraph$class %in% c("bullet","enumeration")) {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
-    spaces_not_first <- determine_leading_spaces(class)
-    spaces_first <- ifelse(class_without_level == "bullet", spaces_not_first - 2, spaces_not_first - 3)
+    spaces_first <- paragraph$indent
+    spaces_not_first <- ifelse(paragraph$class == "bullet", spaces_first + 2, spaces_first + 3)
     out <- map(paragraphs, tidy_listing, spaces_first = spaces_first, spaces_not_first = spaces_not_first) %>%
       flatten_chr()
   }
