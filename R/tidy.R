@@ -1,12 +1,3 @@
-tidy_listing <- function(bullet, spaces = 2, spaces_leading) {
-  bullet <- trimws(bullet)
-  c(
-    paste0(paste0(rep(" ", max(0, spaces_leading)), collapse = ""), bullet[1]),
-    paste0(paste0(rep(" ", spaces), collapse = ""), bullet[-1])
-  )
-}
-
-
 #' Tidy up a paragraph
 #'
 #' After text has been split into pargraphs with
@@ -31,9 +22,9 @@ tidy_paragraph <- function(paragraph, text_width) {
 
   if (class_without_level %in% c("bullet","enumeration")) {
     paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
-    spaces <- determine_trailing_spaces(class)
-    spaces_leading <- ifelse(class_without_level == "bullet", spaces - 2, spaces - 3)
-    out <- map(paragraphs, tidy_listing, spaces = spaces, spaces_leading = spaces_leading) %>%
+    spaces_not_first <- determine_leading_spaces(class)
+    spaces_first <- ifelse(class_without_level == "bullet", spaces_not_first - 2, spaces_not_first - 3)
+    out <- map(paragraphs, tidy_listing, spaces_first = spaces_first, spaces_not_first = spaces_not_first) %>%
       flatten_chr()
   }
     out %>%
@@ -41,13 +32,22 @@ tidy_paragraph <- function(paragraph, text_width) {
       construct_paragraph(paragraph$class)
 }
 
+#' Indents the first line of a listing by `spaces_first` and the remaining
+#' lines by `spaces_not_first`.
+tidy_listing <- function(bullet, spaces_first, spaces_not_first = 2) {
+  bullet <- trimws(bullet)
+  c(
+    paste0(paste0(rep(" ", max(0, spaces_first)), collapse = ""), bullet[1]),
+    paste0(paste0(rep(" ", spaces_not_first), collapse = ""), bullet[-1])
+  )
+}
 
 ensure_empty_trailing_line <- function(x) {
   is_empty <- trimws(x, which = "both") == ""
   c(x[!is_empty], "")
 }
 
-determine_trailing_spaces <- function(class) {
+determine_leading_spaces <- function(class) {
   when(class,
     . == "bullet 1" ~ 2,
     . == "bullet 2" ~ 4,
