@@ -74,27 +74,7 @@ bullet_keys_collapsed <- function(trailing = "") {
 }
 
 determine_class <- function(text) {
-  class <- map_chr(text, determine_class_one)
-  fix_class_for_code(class)
-}
-
-determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
-  classes <- map_chr(paragraphs, ~.x$class)
-  purrr::when(classes,
-              . == "bullet" ~ target_width - 2,
-              . == "enumeration" ~ target_width - 3,
-              target_width
-  )
-}
-
-#' @importFrom purrr map2 flatten_int
-#' @importFrom rlang seq2
-fix_class_for_code <- function(class) {
-  start <- which(class == "code_start")
-  stop <- which(class == "code_stop")
-  idx_code <- map2(start, stop, seq2) %>% flatten_int()
-  class[idx_code] <- "code"
-  class
+  map_chr(text, determine_class_one)
 }
 
 #' Determine the class of text chunk
@@ -103,15 +83,42 @@ fix_class_for_code <- function(class) {
 #' @importFrom purrr when
 #' @keywords internal
 determine_class_one <- function(text) {
-  when(text,
+  class <- when(text,
        substr(.[1], 1, 3) == "```" ~ "code",
        substr(.[1], 1, 2) == "$$" ~ "code",
+       substr(.[1], 1, 1) == "#" ~ "title",
        grepl("^[0-9]+\\.\\s+", .[1], perl = TRUE) ~ "enumeration 1",
        grepl("^\\s\\s+[0-9]+\\.\\s+", .[1]) ~ "enumeration 2",
        grepl(bullet_keys_collapsed(), .[1]) ~ "bullet 1",
        grepl(bullet_keys_collapsed("  +"), .[1]) ~ "bullet 2",
-
-       substr(.[1], 1, 1) == "#" ~ "title",
        "ordinary text"
+  )
+  fix_class_for_code(class)
+}
+
+#' @importFrom purrr map2 flatten_int
+#' @importFrom rlang seq2
+fix_class_for_code <- function(class) {
+  start <- which(class == "code_start")
+  stop <- which(class == "code_stop")
+  if (length(start) < 1L | length(stop) < 1L) return(class)
+  idx_code <- seq2(start, stop)
+  class[idx_code] <- "code"
+  class
+}
+
+
+determine_class_enumeration <- function(text) {
+
+}
+#' * determine class (bullet or enumeration)
+#' * determine depth
+
+determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
+  classes <- map_chr(paragraphs, ~.x$class)
+  purrr::when(classes,
+              . == "bullet" ~ target_width - 2,
+              . == "enumeration" ~ target_width - 3,
+              target_width
   )
 }
