@@ -1,6 +1,6 @@
 #' Tidy a file
 #'
-#' Tidies a Markdown file
+#' Tidies a markdown file.
 #' @param path The path to the file.
 #' @inheritParams cut_long
 #' @export
@@ -12,6 +12,8 @@ tidy_file <- function(path, width = getOption("stylermd.line_width")) {
 }
 
 #' Tidy text
+#'
+#' Tidies text.
 #' @param text The text to tidy.
 #' @inheritParams cut_long
 #' @importFrom purrr flatten_chr map2

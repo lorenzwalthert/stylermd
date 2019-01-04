@@ -15,5 +15,5 @@ iterations than values of \code{width}, the last value of \code{width} is used f
 all remaining iterations.}
 }
 \description{
-Tidy text
+Tidies text.
 }

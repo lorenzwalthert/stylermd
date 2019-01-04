@@ -2,7 +2,7 @@
 % Please edit documentation in R/determine-class-of-paragraph.R
 \name{template_determine_class}
 \alias{template_determine_class}
-\title{Determine the clas and indent of a paragraph}
+\title{Determine the class and indent of a paragraph}
 \usage{
 template_determine_class(paragraph, regex, class)
 }
@@ -17,6 +17,6 @@ e.g. \code{"^(\\s*)(\\* |\\+ |\\- )"}.}
 \item{class}{The class, if matched.}
 }
 \description{
-Determine the clas and indent of a paragraph
+Determine the class and indent of a paragraph
 }
 \keyword{internal}
