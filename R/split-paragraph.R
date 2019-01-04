@@ -3,13 +3,13 @@
 #' Splits text into a list of elements, one corresponding to a paragraph,
 #' for further processing. Each element
 #' contains the text an the class of the chunks.
-#' @inheritParams split_text_into_header_and_paragraph
+#' @inheritParams split_text_into_header_and_body
 #' @importFrom rlang seq2
-#' @importFrom purrr map_chr pmap
+#' @importFrom purrr map_chr pmap flatten_int
 #' @keywords internal
 #' @import zeallot
 split_text_into_paragraphs <- function(text, header = NULL) {
-  c(header, body) %<-% split_text_into_header_and_paragraph(text, header)
+  c(header, body) %<-% split_text_into_header_and_body(text, header)
   c(code_start, is_code_start, code_stop) %<-% find_code_boundaries(body)
   is_code <- map2(code_start, code_stop, seq2) %>%
     flatten_int() %>%
@@ -42,6 +42,8 @@ split_text_into_paragraphs <- function(text, header = NULL) {
 }
 
 #' Find the start / stop of code lines
+#'
+#' @param body The body of a document, i.e. plain text.
 find_code_boundaries <- function(body) {
   is_code_boundary <-
     (substr(body, 1, 3) ==  c("```")) |
@@ -55,9 +57,10 @@ find_code_boundaries <- function(body) {
   )
 }
 
+#' Split text into header and body
 #' @param text Text to process.
 #' @param header The header, in case there is one and it should be overwritten.
-split_text_into_header_and_paragraph <- function(text, header = NULL) {
+split_text_into_header_and_body <- function(text, header = NULL) {
   is_dash <- "---" == text
   if (is_dash[1]) {
     stop <- which(c(FALSE, is_dash[-1]))[1]
@@ -84,63 +87,15 @@ determine_class <- function(paragraphs) {
   map(paragraphs, determine_class_one)
 }
 
-#' Determine the class of text chunk
-#'
-#' @param paragraph A paragraph, i.e. a character vector.
-#' @importFrom purrr when
-#' @keywords internal
-determine_class_one <- function(paragraph) {
-  if (substr(paragraph[1], 1, 3) == "```" || substr(paragraph[1], 1, 2) == "$$") {
-    return(new_class_and_indent("code"))
-  }
-  if (substr(paragraph[1], 1, 1) == "#") {
-    return(new_class_and_indent("title"))
-  }
-  class_enumeration <- determine_class_enumeration(paragraph)
-  if (!is.na(class_enumeration$class)) {
-    return(class_enumeration)
-  }
-  class_bullet <- determine_class_bullet(paragraph)
-  if (!is.na(class_bullet$class)) {
-    return(class_bullet)
-  }
 
-  return(new_class_and_indent("ordinary text"))
-}
-
+#' List constructor
 #' Helper function to construct a list with elements class and indent that
 #' has sensible defaults.
+#' @param class,indent Elements of the list to construct.
+#' @keywords internal
 new_class_and_indent <- function(class = NA, indent = NA) {
   list(class = class, indent = indent)
 }
-
-#' @param t_nchar_to_indent The bare name of a function that transforms the
-#'   number of leading spaces of the first line of the paragraph into an
-#'   indention level, i.e. a mapping from number of characters to the indent.
-#' @param class The class, if matched.
-template_determine_class <- function(paragraph,
-                                     regex,
-                                     class) {
-  length_enumeration <- str_match(paragraph[1], regex)[, 2]
-  if (!is.na(length_enumeration)) {
-    new_class_and_indent(
-      class,
-      nchar(length_enumeration)
-    )
-  } else {
-    new_class_and_indent()
-  }
-}
-
-determine_class_bullet <- purrr::partial(
-  template_determine_class, regex = "^(\\s*)(\\* |\\+ |\\- )",
-  class = "bullet"
-)
-
-determine_class_enumeration <- purrr::partial(
-  template_determine_class, regex = "^(\\s*)[0-9]+\\.\\s+",
-  class = "enumeration"
-)
 
 determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
   classes <- map_chr(paragraphs, ~.x$class)

@@ -12,7 +12,7 @@ LazyData: true
 BugReports: https://github.com/lorenzwalthert/stylermd/issues
 URL: https://github.com/lorenzwalthert/stylermd/issues
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate", "pkgapi::api_roclet"))
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Imports:
     purrr,
     rstudioapi,

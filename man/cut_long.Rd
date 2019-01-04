@@ -4,12 +4,19 @@
 \alias{cut_long}
 \title{Cut a string to a certain width}
 \usage{
-cut_long(text, width)
+cut_long(text, width, max_iter = Inf, current_iter = 1)
 }
 \arguments{
 \item{text}{The text to cut.}
 
-\item{width}{The maximal lenght of a line.}
+\item{width}{The maximal lenght of a line. If \code{length(width) > 1}, the
+elements are used sequentially, one for each iteration. If there are more
+iterations than values of \code{width}, the last value of \code{width} is used for
+all remaining iterations.}
+
+\item{max_iter, current_iter}{The number of maximal / current iterations.
+For example, two iterations will result in two tidied lines and one line
+containing the remaining text.}
 }
 \description{
 Cut a string to a certain width

@@ -36,7 +36,7 @@ tidy_paragraph <- function(paragraph, text_width) {
 #' lines by `spaces_not_first` while maintaining the correct width.
 #' @param listing A listing, as described in the vignette "Data structures".
 #' @param width The target width of the lines, passed to [tidy_lines()].
-#' @param spaces_first Numeric vector of length two. Number of spaces for the
+#' @param spaces Numeric vector of length two. Number of spaces for the
 #'   first line and all remaining lines.
 #' @keywords internal
 tidy_listing <- function(listing, width, spaces = c(0, 0)) {

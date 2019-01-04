@@ -22,6 +22,11 @@ even_index <- function(x) {
   seq(2L, length(x), by = 2)
 }
 
+#' An example text
+#'
+#' Lorem ipsum and so on. You know it.
+#'
+#' @export
 lorem_ipsum <- function() {
   c("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod",
     "tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At",

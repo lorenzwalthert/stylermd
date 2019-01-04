@@ -4,12 +4,13 @@
 \alias{tidy_paragraph}
 \title{Tidy up a paragraph}
 \usage{
-tidy_paragraph(paragraph, width)
+tidy_paragraph(paragraph, text_width)
 }
 \arguments{
 \item{paragraph}{A paragraph to tidy.}
 
-\item{width}{The maximal lenght of a line.}
+\item{text_width}{The width of the text alone, not the same as the total
+line-width for lines containing bullet points ect.}
 }
 \description{
 After text has been split into pargraphs with

@@ -9,7 +9,10 @@ tidy_lines(text, width, add_only = FALSE)
 \arguments{
 \item{text}{Text to tidy.}
 
-\item{width}{The maximal lenght of a line.}
+\item{width}{The maximal lenght of a line. If \code{length(width) > 1}, the
+elements are used sequentially, one for each iteration. If there are more
+iterations than values of \code{width}, the last value of \code{width} is used for
+all remaining iterations.}
 
 \item{add_only}{If we should only add line breaks to lines that are too long
 or if line breaks should also be removed.}

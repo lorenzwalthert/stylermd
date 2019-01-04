@@ -4,9 +4,9 @@
 #'   elements are used sequentially, one for each iteration. If there are more
 #'   iterations than values of `width`, the last value of `width` is used for
 #'   all remaining iterations.
-#' @param max_iter The number of maximal iterations to pursue. For example, two
-#'   iterations will result in two tidied lines and one line containing the
-#'   remaining text.
+#' @param max_iter,current_iter The number of maximal / current iterations.
+#'   For example, two iterations will result in two tidied lines and one line
+#'   containing the remaining text.
 #' @keywords internal
 cut_long <- function(text, width, max_iter = Inf, current_iter = 1) {
   if (length(width) > 1) {

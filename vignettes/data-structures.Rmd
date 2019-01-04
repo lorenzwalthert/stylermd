@@ -19,7 +19,9 @@ knitr::opts_chunk$set(
 We use the following notation for data structures in this package in the 
 following hierarchy: 
 
-* text: A text to style.
+* text: A text to style, this may include headers of markdown files.
+* header: The meta information from a document.
+* body: The body of the text.
 * paragraph: A subset of the text. Each paragraph contains a body and a class. 
   The header of Markdown for example can be a paragraph, but also paragraph in 
   the grammatical sense or an enumeration.

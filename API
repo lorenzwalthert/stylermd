@@ -2,5 +2,6 @@
 
 ## Exported functions
 
+lorem_ipsum()
 tidy_file(path, width = getOption("stylermd.line_width"))
 tidy_text(text, width = getOption("stylermd.line_width"))

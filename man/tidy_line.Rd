@@ -9,7 +9,10 @@ tidy_line(text, width)
 \arguments{
 \item{text}{Text to prettify.}
 
-\item{width}{The maximal lenght of a line.}
+\item{width}{The maximal lenght of a line. If \code{length(width) > 1}, the
+elements are used sequentially, one for each iteration. If there are more
+iterations than values of \code{width}, the last value of \code{width} is used for
+all remaining iterations.}
 }
 \description{
 Necessary to be called with \code{purrr::map(..., tidy_lines)} only if \code{add_only}
