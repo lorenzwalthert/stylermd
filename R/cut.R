@@ -1,8 +1,12 @@
 #' Cut a string to a certain width
 #' @param text The text to cut.
 #' @param width The maximal lenght of a line.
+#' @param max_iter The number of maximal iterations to pursue. For example, two
+#'   iterations will result in two tidied lines and one line containing the
+#'   remaining text.
 #' @keywords internal
-cut_long <- function(text, width) {
+cut_long <- function(text, width, max_iter = Inf, current_iter = 1) {
+  if (current_iter > max_iter) return(text)
   if (nchar(text) < width) return(text)
 
   blanks <- str_locate_all(text, " ")[[1]][, 1]
@@ -10,7 +14,12 @@ cut_long <- function(text, width) {
   optimal_width <- cutting_points(blanks, width + 1L)
   we_do <- str_sub(text, 1, optimal_width)
   postpone <- str_sub(text, optimal_width + 1, - 1)
-  c(we_do, cut_long(postpone, width)) %>%
+  c(
+    we_do,
+    cut_long(postpone,
+      width = width, max_iter = max_iter, current_iter = current_iter + 1L
+    )
+  ) %>%
     unlist() %>%
     paste0(collapse = "\n") %>%
     str_split_fixed("\n", n = Inf) %>%
