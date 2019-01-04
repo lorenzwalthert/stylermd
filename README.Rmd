@@ -25,8 +25,8 @@ it does really just one thing: Making every line at most 80 characters, or a
 custom line width you can set with the option `stylermd.linewidth`, i.e.
 `options("stylermd.linewidth", 60)`. It supports:
 
-* Both adding and removing linebreaks for float text, enumerations, bullet
-  lists (currently up to two levels of nesting).
+* Both adding and removing line breaks for float text, nested enumerations and 
+  bullet lists.
 * Files with and without code chunks (any extension).
 * Ignoring code chunks and latex equations.
 * Files with YAML Header.
