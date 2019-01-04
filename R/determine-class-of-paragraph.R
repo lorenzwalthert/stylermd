@@ -5,7 +5,9 @@
 #' @importFrom purrr when
 #' @keywords internal
 determine_class_one <- function(paragraph) {
-  if (substr(paragraph[1], 1, 3) == "```" || substr(paragraph[1], 1, 2) == "$$") {
+  is_code <- substr(paragraph[1], 1, 3) == "```"
+  is_latex <- substr(paragraph[1], 1, 2) == "$$"
+  if (is_code || is_latex) {
     return(new_class_and_indent("code"))
   }
   if (substr(paragraph[1], 1, 1) == "#") {
@@ -23,7 +25,7 @@ determine_class_one <- function(paragraph) {
   return(new_class_and_indent("ordinary text"))
 }
 
-#' Determine the clas and indent of a paragraph
+#' Determine the class and indent of a paragraph
 #'
 #' @inheritParams determine_class_one
 #' @param regex The regular expression that matches listing, e.g. bullet of

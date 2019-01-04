@@ -11,12 +11,18 @@
 tidy_paragraph <- function(paragraph, text_width) {
   text_without_blank <- paragraph$text[trimws(paragraph$text) != ""]
   if (length(text_without_blank) < 1L) return(character(0))
+
   if (paragraph$class %in% c("header", "code", "title")) {
     return(paragraph)
   } else if (paragraph$class %in% c("bullet","enumeration")) {
-    paragraphs <- split(text_without_blank, cumsum(substr(text_without_blank, 1, 1) %in% bullet_keys()))
+    paragraphs <- split(text_without_blank,
+      f = cumsum(substr(text_without_blank, 1, 1) %in% bullet_keys())
+    )
     spaces_first <- paragraph$indent
-    spaces_not_first <- ifelse(paragraph$class == "bullet", spaces_first + 2, spaces_first + 3)
+    spaces_not_first <- ifelse(paragraph$class == "bullet",
+      spaces_first + 2, spaces_first + 3
+    )
+
     out <- map(paragraphs, tidy_listing,
       spaces = c(spaces_first, spaces_not_first),
       width = c(text_width - spaces_first, text_width - spaces_not_first)

@@ -15,9 +15,7 @@ cut_long <- function(text, width, max_iter = Inf, current_iter = 1) {
   } else {
     width_postponed <- width
   }
-  if (current_iter > max_iter) return(text)
-  if (length(nchar(text)) > 1 | length(width) > 1) browser()
-  if (nchar(text) < width) return(text)
+  if (current_iter > max_iter | nchar(text) < width) return(text)
 
   blanks <- str_locate_all(text, " ")[[1]][, 1]
   if (all(is.na(blanks))) return(text)

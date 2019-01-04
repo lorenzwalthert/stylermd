@@ -30,7 +30,8 @@ split_text_into_paragraphs <- function(text, header = NULL) {
   non_header_attrs <- determine_class(non_header)
   non_header_lst <- pmap(
     list(
-      non_header, non_header_attrs, lead(non_header_attrs, default = list(new_class_and_indent()))
+      non_header, non_header_attrs,
+      lead(non_header_attrs, default = list(new_class_and_indent()))
     ),
     ~list(
       text = ..1, class = ..2[["class"]], class_after = ..3[["class"]],
@@ -64,7 +65,9 @@ split_text_into_header_and_body <- function(text, header = NULL) {
   is_dash <- "---" == text
   if (is_dash[1]) {
     stop <- which(c(FALSE, is_dash[-1]))[1]
-    header <- list(`0` = construct_paragraph(c(text[seq2(1L, stop)], ""), "header"))
+    header <- list(
+      `0` = construct_paragraph(c(text[seq2(1L, stop)], ""), "header")
+    )
     text <- text[-seq2(1L, stop)]
   }
   list(header = header, body = text)
