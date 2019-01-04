@@ -107,8 +107,7 @@ transform_and_check <- function(in_item, out_item,
     )
   } else {
     message(
-      in_name, " was identical to ", out_name,
-      immediate. = TRUE, call. = FALSE
+      in_name, " was identical to ", out_name
     )
   }
 }
