@@ -13,45 +13,43 @@ tidy_paragraph <- function(paragraph, text_width) {
   if (length(text_without_blank) < 1L) return(character(0))
   if (paragraph$class %in% c("header", "code", "title")) {
     return(paragraph)
-  } else {
-    out <- tidy_lines(text_without_blank, width = text_width)
-  }
-
-  if (paragraph$class %in% c("bullet","enumeration")) {
-    paragraphs <- split(out, cumsum(substr(out, 1, 1) %in% bullet_keys()))
+  } else if (paragraph$class %in% c("bullet","enumeration")) {
+    paragraphs <- split(text_without_blank, cumsum(substr(text_without_blank, 1, 1) %in% bullet_keys()))
     spaces_first <- paragraph$indent
     spaces_not_first <- ifelse(paragraph$class == "bullet", spaces_first + 2, spaces_first + 3)
     out <- map(paragraphs, tidy_listing,
-      spaces_first = spaces_first, spaces_not_first = spaces_not_first,
+      spaces = c(spaces_first, spaces_not_first),
       width = c(text_width - spaces_first, text_width - spaces_not_first)
     ) %>%
       flatten_chr()
+  } else {
+    out <- tidy_lines(text_without_blank, width = text_width)
   }
     out %>%
       ensure_empty_trailing_line() %>%
       construct_paragraph(paragraph$class)
 }
 
+#' Tidies a listing and indents correctly
+#'
 #' Indents the first line of a listing by `spaces_first` and the remaining
-#' lines by `spaces_not_first`.
-tidy_listing <- function(listing, width, spaces_first = 0, spaces_not_first = 2) {
+#' lines by `spaces_not_first` while maintaining the correct width.
+#' @param listing A listing, as described in the vignette "Data structures".
+#' @param width The target width of the lines, passed to [tidy_lines()].
+#' @param spaces_first Numeric vector of length two. Number of spaces for the
+#'   first line and all remaining lines.
+#' @keywords internal
+tidy_listing <- function(listing, width, spaces = c(0, 0)) {
   listing <- tidy_lines(listing, width = width)
   c(
-    paste0(paste0(rep(" ", max(0, spaces_first)), collapse = ""), listing[1]),
-    paste0(paste0(rep(" ", spaces_not_first), collapse = ""), listing[-1])
+    paste0(paste0(rep(" ", max(0, spaces[1])), collapse = ""), listing[1]),
+    paste0(paste0(rep(" ", spaces[2]), collapse = ""), listing[-1])
   )
 }
 
 ensure_empty_trailing_line <- function(x) {
   is_empty <- trimws(x, which = "both") == ""
   c(x[!is_empty], "")
-}
-
-#' Drops hierarchival level of class
-#'
-#' E.g. enumeration 1 -> enumeration, but level -> level
-drop_level_of_class <- function(class) {
-  gsub("\\s*[0-9]+$", "", class)
 }
 
 #' Tidy lines

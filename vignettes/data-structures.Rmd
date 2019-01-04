@@ -1,0 +1,28 @@
+---
+title: "Data structures"
+author: "Lorenz Walthert"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data structures}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+We use the following notation for data structures in this package in the 
+following hierarchy: 
+
+* text: A text to style.
+* paragraph: A subset of the text. Each paragraph contains a body and a class. 
+  The header of Markdown for example can be a paragraph, but also paragraph in 
+  the grammatical sense or an enumeration.
+* listing: One element from a paragraph. Only applicable to enumerations and 
+  bullet lists. This is necessary because each bullet point / enumeration needs
+  to be processed separately. 

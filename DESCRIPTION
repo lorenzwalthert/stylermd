@@ -23,4 +23,7 @@ Imports:
     glue (>= 1.3),
     zeallot
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
