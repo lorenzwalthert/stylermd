@@ -14,7 +14,7 @@ tidy_paragraph <- function(paragraph, text_width) {
 
   if (paragraph$class %in% c("header", "code", "title")) {
     return(paragraph)
-  } else if (paragraph$class %in% c("bullet","enumeration")) {
+  } else if (paragraph$class %in% c("bullet", "enumeration")) {
     paragraphs <- split(text_without_blank,
       f = cumsum(substr(text_without_blank, 1, 1) %in% bullet_keys())
     )
@@ -31,9 +31,9 @@ tidy_paragraph <- function(paragraph, text_width) {
   } else {
     out <- tidy_lines(text_without_blank, width = text_width)
   }
-    out %>%
-      ensure_empty_trailing_line() %>%
-      construct_paragraph(paragraph$class)
+  out %>%
+    ensure_empty_trailing_line() %>%
+    construct_paragraph(paragraph$class)
 }
 
 #' Tidies a listing and indents correctly

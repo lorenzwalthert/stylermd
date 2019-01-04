@@ -1,5 +1,5 @@
 #' @importFrom rlang seq2
-lag <- function (x, n = 1L, default = NA) {
+lag <- function(x, n = 1L, default = NA) {
   c(rep(default, n), x[seq2(1L, length(x) - n)])
 }
 

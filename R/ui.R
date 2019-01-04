@@ -9,7 +9,6 @@ tidy_file <- function(path, width = getOption("stylermd.line_width")) {
   readLines(path) %>%
     tidy_text(width) %>%
     writeLines(path)
-
 }
 
 #' Tidy text
@@ -24,4 +23,3 @@ tidy_text <- function(text, width = getOption("stylermd.line_width")) {
     deconstruct_paragraph() %>%
     flatten_chr()
 }
-

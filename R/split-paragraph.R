@@ -33,7 +33,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
       non_header, non_header_attrs,
       lead(non_header_attrs, default = list(new_class_and_indent()))
     ),
-    ~list(
+    ~ list(
       text = ..1, class = ..2[["class"]], class_after = ..3[["class"]],
       indent = ..2[["indent"]]
     )
@@ -47,8 +47,8 @@ split_text_into_paragraphs <- function(text, header = NULL) {
 #' @param body The body of a document, i.e. plain text.
 find_code_boundaries <- function(body) {
   is_code_boundary <-
-    (substr(body, 1, 3) ==  c("```")) |
-    (substr(body, 1, 2) == "$$")
+    (substr(body, 1, 3) == c("```")) |
+      (substr(body, 1, 2) == "$$")
   code_boundary <- which(is_code_boundary)
   code_start <- odd(code_boundary)
   list(
@@ -101,10 +101,11 @@ new_class_and_indent <- function(class = NA, indent = NA) {
 }
 
 determine_text_with_from_paragraphs <- function(paragraphs, target_width) {
-  classes <- map_chr(paragraphs, ~.x$class)
-  purrr::when(classes,
-              . == "bullet" ~ target_width - 2,
-              . == "enumeration" ~ target_width - 3,
-              target_width
+  classes <- map_chr(paragraphs, ~ .x$class)
+  purrr::when(
+    classes,
+    . == "bullet" ~ target_width - 2,
+    . == "enumeration" ~ target_width - 3,
+    target_width
   )
 }

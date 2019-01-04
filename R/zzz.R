@@ -3,6 +3,6 @@
   op.stylermd <- list(stylermd.line_width = 80)
 
   toset <- !(names(op.stylermd) %in% names(op))
-  if(any(toset)) options(op.stylermd[toset])
+  if (any(toset)) options(op.stylermd[toset])
   invisible()
 }

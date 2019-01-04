@@ -32,4 +32,3 @@ test_that("enumeration", {
     list(class = "enumeration", indent = 3)
   )
 })
-

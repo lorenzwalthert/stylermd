@@ -21,7 +21,7 @@ cut_long <- function(text, width, max_iter = Inf, current_iter = 1) {
   if (all(is.na(blanks))) return(text)
   optimal_width <- cutting_points(blanks, width + 1L)
   we_do <- str_sub(text, 1, optimal_width)
-  postpone <- str_sub(text, optimal_width + 1, - 1)
+  postpone <- str_sub(text, optimal_width + 1, -1)
   c(
     we_do,
     cut_long(postpone,
@@ -51,9 +51,8 @@ last <- function(x) {
 
 split_pos <- function(string, pos) {
   if (length(pos) < 1) return(string)
-  first <-  str_sub(string, 1, pos) # incl withespace
+  first <- str_sub(string, 1, pos) # incl withespace
   if (nchar(string) <= pos) return(first)
   second <- str_sub(string, pos + 1, -1)
   c(first, second)
 }
-

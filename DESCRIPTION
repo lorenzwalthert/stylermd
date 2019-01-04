@@ -1,29 +1,35 @@
-Package: stylermd
 Type: Package
+Package: stylermd
 Title: Style Markdown text
 Version: 0.1.0
-Authors@R: person("Lorenz", "Walthert", role = c("cre", "aut"), email = "lorenz.walthert@icloud.com")
+Date: 2018-07-10
+Authors@R: 
+    person(given = "Lorenz",
+           family = "Walthert",
+           role = c("cre", "aut"),
+           email = "lorenz.walthert@icloud.com")
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3
-Date: 2018-07-10
-Encoding: UTF-8
-LazyData: true
-BugReports: https://github.com/lorenzwalthert/stylermd/issues
 URL: https://github.com/lorenzwalthert/stylermd/issues
-Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate", "pkgapi::api_roclet"))
-RoxygenNote: 6.1.1
+BugReports: https://github.com/lorenzwalthert/stylermd/issues
 Imports:
-    purrr,
-    rstudioapi,
-    stringr,
-    rlang,
-    rprojroot,
     enc,
     glue (>= 1.3),
+    purrr,
+    rlang,
+    rprojroot,
+    rstudioapi,
+    stringr,
     zeallot
 Suggests: 
-    testthat,
     knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace",
+    "collate", "pkgapi::api_roclet"))
+RoxygenNote: 6.1.1

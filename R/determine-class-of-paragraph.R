@@ -48,11 +48,13 @@ template_determine_class <- function(paragraph,
 }
 
 determine_class_bullet <- purrr::partial(
-  template_determine_class, regex = "^(\\s*)(\\* |\\+ |\\- )",
+  template_determine_class,
+  regex = "^(\\s*)(\\* |\\+ |\\- )",
   class = "bullet"
 )
 
 determine_class_enumeration <- purrr::partial(
-  template_determine_class, regex = "^(\\s*)[0-9]+\\.\\s+",
+  template_determine_class,
+  regex = "^(\\s*)[0-9]+\\.\\s+",
   class = "enumeration"
 )

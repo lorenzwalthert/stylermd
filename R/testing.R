@@ -42,11 +42,11 @@ test_collection <- function(test, sub_test = NULL,
   in_items <- file.path(path, in_names)
 
   pwalk(list(in_items, out_items, in_names, out_names),
-        transform_and_check,
-        transformer = transformer,
-        write_back = write_back,
-        write_tree = write_tree,
-        ...
+    transform_and_check,
+    transformer = transformer,
+    write_back = write_back,
+    write_tree = write_tree,
+    ...
   )
 }
 
@@ -58,8 +58,10 @@ test_collection <- function(test, sub_test = NULL,
 #'   *-out.R file, everything after the first dash is replaced by *-out.R.
 #' @param in_paths A character vector that denotes paths to *-in.R files.
 #' @examples
-#' stylermd:::construct_out(c("path/to/file/first-in.R",
-#'  "path/to/file/first-extended-in.R"))
+#' stylermd:::construct_out(c(
+#'   "path/to/file/first-in.R",
+#'   "path/to/file/first-extended-in.R"
+#' ))
 #' @keywords internal
 construct_out <- function(in_paths) {
   gsub("\\-in([.](txt|Rmd))?$", "\\-out\\1", in_paths)

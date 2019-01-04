@@ -12,7 +12,8 @@ tidy_active_file <- function() {
   out <- tidy_text(context$content)
   rstudioapi::modifyRange(
     c(1, 1, length(context$contents) + 1, 1),
-    paste0(append(out, ""), collapse = "\n"), id = context$id
+    paste0(append(out, ""), collapse = "\n"),
+    id = context$id
   )
   may_save(context)
   rstudioapi::setCursorPosition(context$selection[[1]]$range)
@@ -31,7 +32,8 @@ tidy_selection <- function() {
   if (all(nchar(text) == 0)) stop("Nothing selected")
   out <- tidy_text(text)
   rstudioapi::modifyRange(
-    context$selection[[1]]$range, paste0(out, collapse = "\n"), id = context$id
+    context$selection[[1]]$range, paste0(out, collapse = "\n"),
+    id = context$id
   )
   may_save(context)
 }
@@ -40,4 +42,3 @@ tidy_selection <- function() {
 get_rstudio_context <- function() {
   rstudioapi::getActiveDocumentContext()
 }
-
