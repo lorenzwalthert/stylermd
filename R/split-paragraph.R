@@ -15,7 +15,7 @@ split_text_into_paragraphs <- function(text, header = NULL) {
     flatten_int() %>%
     unwhich(length(body))
   trimmed_body <- trimws(body, which = "both")
-  regex <- paste0(bullet_keys_collapsed(), "|[0-9]+\\.", sep = "")
+  regex <- paste0("^(\\* |\\+ |\\- |[0-9]+\\.|[a-z]\\.)", sep = "")
   is_enumeration <- grepl(regex, trimmed_body)
 
   has_line_break_afterwards <- grepl("^\\s*$", lag(trimmed_body))

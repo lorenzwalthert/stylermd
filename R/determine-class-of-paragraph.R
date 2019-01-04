@@ -55,6 +55,6 @@ determine_class_bullet <- purrr::partial(
 
 determine_class_enumeration <- purrr::partial(
   template_determine_class,
-  regex = "^(\\s*)[0-9]+\\.\\s+",
+  regex = "^(\\s*)([0-9]+|[a-z])\\.\\s+",
   class = "enumeration"
 )
