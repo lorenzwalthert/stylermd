@@ -16,7 +16,10 @@ tidy_file <- function(path, width = getOption("stylermd.line_width")) {
     tidy_text(width) %>%
     writeLines(path)
     !identical(unclass(content_in), unclass(content_out))
-  }, error = function(e) NA
+  }, error = function(e) {
+    warning("When processing ", path, ": ", conditionMessage(e), call. = FALSE)
+    NA
+  }
   )
 }
 
