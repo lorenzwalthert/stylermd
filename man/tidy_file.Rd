@@ -14,6 +14,10 @@ elements are used sequentially, one for each iteration. If there are more
 iterations than values of \code{width}, the last value of \code{width} is used for
 all remaining iterations.}
 }
+\value{
+If the file has been changed (ignoring the class attribute), \code{TRUE} is
+returned, \code{NA} if an error occured and \code{FALSE} if it has not been changed.
+}
 \description{
-Tidies a markdown file.
+Tidies a markdown file, called for it's side effect.
 }

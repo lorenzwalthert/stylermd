@@ -1,14 +1,23 @@
 #' Tidy a file
 #'
-#' Tidies a markdown file.
+#' Tidies a markdown file, called for it's side effect.
+#'
+#' @return
+#' If the file has been changed (ignoring the class attribute), `TRUE` is
+#' returned, `NA` if an error occured and `FALSE` if it has not been changed.
 #' @param path The path to the file.
 #' @inheritParams cut_long
 #' @export
 #' @import glue
 tidy_file <- function(path, width = getOption("stylermd.line_width")) {
-  readLines(path) %>%
+  tryCatch({
+    content_in <- readLines(path)
+    content_out <- content_in %>%
     tidy_text(width) %>%
     writeLines(path)
+    !identical(unclass(content_in), unclass(content_out))
+  }, error = function(e) NA
+  )
 }
 
 #' Tidy text
